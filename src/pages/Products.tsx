@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
+import { useState, useEffect, useMemo, useRef, } from 'react';
 import { createPortal } from 'react-dom';
 import { useProducts, type Product } from '../context/ProductContext';
 import { useAuth } from '../context/AuthContext';
