@@ -14,5 +14,5 @@ export default defineConfig({
       ],
     },
   },
-  base: "/SMSPOS",
+  base: "/sms-pos/",
 })
