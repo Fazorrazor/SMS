@@ -21,7 +21,7 @@ import { Dropdown } from '../components/ui/Dropdown';
 
 type SettingsTab = 'General' | 'Notifications' | 'Security' | 'Localization' | 'Backup';
 
-const API_URL = `http://${window.location.hostname}:5000/api`;
+const API_URL = `/api`;
 
 export const Settings = () => {
     const { user, isAdmin } = useAuth();
@@ -480,3 +480,4 @@ export const Settings = () => {
         </div>
     );
 };
+

@@ -5,7 +5,20 @@ import autoprefixer from 'autoprefixer'
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: '/sms_app/',
   plugins: [react()],
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:5000',
+        changeOrigin: true,
+      },
+      '/socket.io': {
+        target: 'http://localhost:5000',
+        ws: true,
+      },
+    }
+  },
   css: {
     postcss: {
       plugins: [
@@ -14,5 +27,4 @@ export default defineConfig({
       ],
     },
   },
-  base: "/sms_app",
 })

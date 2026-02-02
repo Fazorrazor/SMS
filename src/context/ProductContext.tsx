@@ -41,8 +41,8 @@ interface ProductContextType {
 
 const ProductContext = createContext<ProductContextType | undefined>(undefined);
 
-const API_URL = `http://${window.location.hostname}:5000/api`;
-const API_BASE = `http://${window.location.hostname}:5000`;
+const API_BASE = import.meta.env.VITE_API_URL || '';
+const API_URL = `${API_BASE}/api`;
 
 export const ProductProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [products, setProducts] = useState<Product[]>([]);
@@ -280,3 +280,4 @@ export const useProducts = () => {
     }
     return context;
 };
+

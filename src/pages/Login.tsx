@@ -17,8 +17,9 @@ export const Login = () => {
 
     useEffect(() => {
         const fetchSettings = async () => {
+            const apiBase = import.meta.env.VITE_API_URL || '';
             try {
-                const res = await fetch(`http://${window.location.hostname}:5000/api/settings`);
+                const res = await fetch(`${apiBase}/api/settings`);
                 if (res.ok) {
                     const data = await res.json();
                     setSettings(data);
@@ -130,3 +131,4 @@ export const Login = () => {
         </div>
     );
 };
+

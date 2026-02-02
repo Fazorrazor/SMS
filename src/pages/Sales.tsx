@@ -107,7 +107,7 @@ export const Sales = () => {
     useEffect(() => {
         const fetchSettings = async () => {
             try {
-                const res = await fetch(`http://${window.location.hostname}:5000/api/settings`);
+                const res = await fetch(`${import.meta.env.VITE_API_URL || ""}/api/settings`);
                 if (res.ok) {
                     const data = await res.json();
                     setSettings(data);
@@ -1285,3 +1285,5 @@ export const Sales = () => {
         </div >
     );
 };
+
+
