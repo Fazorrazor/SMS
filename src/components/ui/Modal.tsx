@@ -49,8 +49,7 @@ export const Modal = ({
         md: 'max-w-xl',
         lg: 'max-w-2xl',
         xl: 'max-w-4xl',
-        full: 'max-w-[95vw] h-[90vh]',
-    };
+        full: 'max-w-[95vw] h-[90vh]' };
 
     return createPortal(
         <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4 md:p-6 bg-secondary-950/60 backdrop-blur-[2px] animate-in fade-in duration-300 transform-gpu">
@@ -94,4 +93,5 @@ export const Modal = ({
         document.body
     );
 };
+
 

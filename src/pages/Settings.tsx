@@ -21,8 +21,7 @@ import { Dropdown } from '../components/ui/Dropdown';
 
 type SettingsTab = 'General' | 'Notifications' | 'Security' | 'Localization' | 'Backup';
 
-const API_BASE = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '');
-const API_URL = `${API_BASE}/api`;
+const API_URL = '/api';
 
 export const Settings = () => {
     const { user, isAdmin } = useAuth();
@@ -74,9 +73,7 @@ export const Settings = () => {
 
     const fetchSettings = async () => {
         try {
-            const res = await fetch(`${API_URL}/settings`, {
-                headers: { "ngrok-skip-browser-warning": "69420" }
-            });
+            const res = await fetch(`${API_URL}/settings`);
             if (res.ok) {
                 const data = await res.json();
                 setSettings({
@@ -102,7 +99,6 @@ export const Settings = () => {
             const res = await fetch(`${API_URL}/settings`, {
                 method: 'POST',
                 headers: {
-                    "ngrok-skip-browser-warning": "69420",
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(settings)
@@ -129,7 +125,7 @@ export const Settings = () => {
         try {
             const res = await fetch(`${API_URL}/change-password`, {
                 method: 'POST',
-                headers: { "ngrok-skip-browser-warning": "69420", 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     userId: user?.id,
                     currentPassword: passwords.current,
@@ -486,6 +482,7 @@ export const Settings = () => {
         </div>
     );
 };
+
 
 
 

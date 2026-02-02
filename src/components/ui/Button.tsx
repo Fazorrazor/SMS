@@ -14,15 +14,13 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             secondary: 'bg-secondary-100 dark:bg-secondary-800 text-secondary-900 dark:text-secondary-50 hover:bg-secondary-200 dark:hover:bg-secondary-700 active:scale-95',
             danger: 'bg-danger-600 text-white hover:bg-danger-700 shadow-lg shadow-danger-600/20 active:scale-95',
             ghost: 'bg-transparent text-secondary-600 dark:text-secondary-400 hover:bg-secondary-100 dark:hover:bg-secondary-800 hover:text-secondary-900 dark:hover:text-secondary-50',
-            outline: 'bg-transparent border-2 border-secondary-200 dark:border-secondary-700 text-secondary-700 dark:text-secondary-300 hover:border-secondary-300 dark:hover:border-secondary-600 hover:bg-secondary-50 dark:hover:bg-secondary-800 active:scale-95',
-        };
+            outline: 'bg-transparent border-2 border-secondary-200 dark:border-secondary-700 text-secondary-700 dark:text-secondary-300 hover:border-secondary-300 dark:hover:border-secondary-600 hover:bg-secondary-50 dark:hover:bg-secondary-800 active:scale-95' };
 
         const sizes = {
             sm: 'px-3 py-1.5 text-xs font-bold rounded-lg',
             md: 'px-4 py-2.5 text-sm font-bold rounded-xl',
             lg: 'px-6 py-3.5 text-base font-bold rounded-2xl',
-            xl: 'px-8 py-4 text-lg font-extrabold rounded-2xl',
-        };
+            xl: 'px-8 py-4 text-lg font-extrabold rounded-2xl' };
 
         return (
             <button
@@ -53,4 +51,5 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 );
 
 Button.displayName = 'Button';
+
 

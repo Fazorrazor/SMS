@@ -27,8 +27,7 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const API_BASE = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '');
-const API_URL = `${API_BASE}/api`;
+const API_URL = '/api';
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [user, setUser] = useState<User | null>(null);
@@ -37,9 +36,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     const refreshUsers = async () => {
         try {
-            const res = await fetch(`${API_URL}/users`, {
-                headers: { "ngrok-skip-browser-warning": "69420" }
-            });
+            const res = await fetch(`${API_URL}/users`);
             if (res.ok) {
                 const data = await res.json();
                 setUsers(data);
@@ -63,10 +60,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         try {
             const res = await fetch(`${API_URL}/login`, {
                 method: 'POST',
-                headers: { "ngrok-skip-browser-warning": "69420", 
-                    'Content-Type': 'application/json',
-                    "ngrok-skip-browser-warning": "69420"
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username, password })
             });
 
@@ -96,10 +90,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         try {
             const res = await fetch(`${API_URL}/users`, {
                 method: 'POST',
-                headers: { "ngrok-skip-browser-warning": "69420", 
-                    'Content-Type': 'application/json',
-                    "ngrok-skip-browser-warning": "69420"
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(userData)
             });
             if (res.ok) {
@@ -118,10 +109,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         try {
             const res = await fetch(`${API_URL}/users/${id}`, {
                 method: 'PUT',
-                headers: { "ngrok-skip-browser-warning": "69420", 
-                    'Content-Type': 'application/json',
-                    "ngrok-skip-browser-warning": "69420"
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
             });
             if (res.ok) {
@@ -150,8 +138,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const deleteUser = async (id: string) => {
         try {
             const res = await fetch(`${API_URL}/users/${id}`, {
-                method: 'DELETE',
-                headers: { "ngrok-skip-browser-warning": "69420" }
+                method: 'DELETE'
             });
             if (res.ok) {
                 await refreshUsers();
@@ -170,10 +157,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         try {
             const res = await fetch(`${API_URL}/login`, {
                 method: 'POST',
-                headers: { "ngrok-skip-browser-warning": "69420", 
-                    'Content-Type': 'application/json',
-                    "ngrok-skip-browser-warning": "69420"
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username: user.username, password })
             });
             return res.ok;
@@ -210,5 +194,6 @@ export const useAuth = () => {
     }
     return context;
 };
+
 
 

@@ -18,12 +18,12 @@ export const Skeleton = ({
                     'h-4 w-full': variant === 'text',
                     'rounded-full': variant === 'circular',
                     'rounded-md': variant === 'rounded',
-                    'rounded-none': variant === 'rectangular',
-                },
+                    'rounded-none': variant === 'rectangular' },
                 className
             )}
             {...props}
         />
     );
 };
+
 

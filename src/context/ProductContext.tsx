@@ -41,8 +41,7 @@ interface ProductContextType {
 
 const ProductContext = createContext<ProductContextType | undefined>(undefined);
 
-const API_BASE = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '');
-const API_URL = `${API_BASE}/api`;
+const API_URL = '/api';
 
 export const ProductProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [products, setProducts] = useState<Product[]>([]);
@@ -58,9 +57,9 @@ export const ProductProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
         try {
             const [productsRes, salesRes, settingsRes] = await Promise.all([
-                fetch(`${API_URL}/products`, { headers: { "ngrok-skip-browser-warning": "69420" } }),
-                fetch(`${API_URL}/sales`, { headers: { "ngrok-skip-browser-warning": "69420" } }),
-                fetch(`${API_URL}/settings`, { headers: { "ngrok-skip-browser-warning": "69420" } })
+                fetch(`${API_URL}/products`),
+                fetch(`${API_URL}/sales`),
+                fetch(`${API_URL}/settings`)
             ]);
 
             if (productsRes.ok && salesRes.ok && settingsRes.ok) {
@@ -84,11 +83,7 @@ export const ProductProvider: React.FC<{ children: React.ReactNode }> = ({ child
     useEffect(() => {
         refreshData(true);
 
-        const socket = io(API_BASE, {
-            extraHeaders: {
-                "ngrok-skip-browser-warning": "69420"
-            }
-        });
+        const socket = io();
 
         socket.on('connect', () => {
             setIsOnline(true);
@@ -107,7 +102,7 @@ export const ProductProvider: React.FC<{ children: React.ReactNode }> = ({ child
             const productNames = sale.items.map((i: any) => i.name).join(', ');
             toast.success(`Sale: ${productNames}`, {
                 description: `Total: ${sale.total.toFixed(2)}`,
-                duration: 5000,
+                duration: 5000
             });
         });
 
@@ -134,8 +129,7 @@ export const ProductProvider: React.FC<{ children: React.ReactNode }> = ({ child
             const res = await fetch(`${API_URL}/products`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
-                    "ngrok-skip-browser-warning": "69420"
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(product)
             });
@@ -159,7 +153,6 @@ export const ProductProvider: React.FC<{ children: React.ReactNode }> = ({ child
                 await fetch(`${API_URL}/products`, {
                     method: 'POST',
                     headers: {
-                        "ngrok-skip-browser-warning": "69420",
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify(product)
@@ -178,7 +171,6 @@ export const ProductProvider: React.FC<{ children: React.ReactNode }> = ({ child
             const res = await fetch(`${API_URL}/products/${id}`, {
                 method: 'PUT',
                 headers: {
-                    "ngrok-skip-browser-warning": "69420",
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(product)
@@ -198,8 +190,7 @@ export const ProductProvider: React.FC<{ children: React.ReactNode }> = ({ child
     const deleteProduct = async (id: string) => {
         try {
             const res = await fetch(`${API_URL}/products/${id}`, {
-                method: 'DELETE',
-                headers: { "ngrok-skip-browser-warning": "69420" }
+                method: 'DELETE'
             });
             if (res.ok) {
                 const data = await res.json();
@@ -220,7 +211,6 @@ export const ProductProvider: React.FC<{ children: React.ReactNode }> = ({ child
             const res = await fetch(`${API_URL}/products/${productId}/stock`, {
                 method: 'PATCH',
                 headers: {
-                    "ngrok-skip-browser-warning": "69420",
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ quantity })
@@ -238,7 +228,6 @@ export const ProductProvider: React.FC<{ children: React.ReactNode }> = ({ child
             const res = await fetch(`${API_URL}/sales`, {
                 method: 'POST',
                 headers: {
-                    "ngrok-skip-browser-warning": "69420",
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(sale)
@@ -258,8 +247,7 @@ export const ProductProvider: React.FC<{ children: React.ReactNode }> = ({ child
     const voidSale = async (id: string) => {
         try {
             const res = await fetch(`${API_URL}/sales/${id}`, {
-                method: 'DELETE',
-                headers: { "ngrok-skip-browser-warning": "69420" }
+                method: 'DELETE'
             });
             if (res.ok) {
                 await refreshData(true);
@@ -301,5 +289,6 @@ export const useProducts = () => {
     }
     return context;
 };
+
 
 

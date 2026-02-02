@@ -17,11 +17,8 @@ export const Login = () => {
 
     useEffect(() => {
         const fetchSettings = async () => {
-            const apiBase = import.meta.env.VITE_API_URL || '';
             try {
-                const res = await fetch(`${apiBase}/api/settings`, {
-                    headers: { "ngrok-skip-browser-warning": "69420" }
-                });
+                const res = await fetch(`/api/settings`);
                 if (res.ok) {
                     const data = await res.json();
                     setSettings(data);
@@ -62,77 +59,71 @@ export const Login = () => {
 
             <div className="w-full max-w-md relative animate-in zoom-in-95 duration-500">
                 {/* Logo Section */}
-                <div className="flex flex-col items-center mb-10">
-                    <div className="w-20 h-20 rounded-[2rem] bg-primary-600 flex items-center justify-center shadow-2xl shadow-primary-600/20 mb-6">
-                        <span className="text-white font-black text-4xl">{settings?.storeName?.charAt(0) || 'H'}</span>
+                <div className="text-center mb-10">
+                    <div className="inline-flex items-center justify-center w-20 h-20 bg-primary-600 rounded-[2rem] shadow-2xl shadow-primary-600/30 mb-6 rotate-12 hover:rotate-0 transition-all duration-500 group">
+                        <Lock className="w-10 h-10 text-white group-hover:scale-110 transition-transform" />
                     </div>
-                    <h1 className="text-4xl font-black text-secondary-900 dark:text-secondary-50 tracking-tight truncate max-w-md">{settings?.storeName || 'Home of Disposables'}</h1>
-                    <p className="text-secondary-500 dark:text-secondary-400 font-medium mt-2">Sign in to manage your business</p>
+                    <h1 className="text-4xl font-black text-secondary-900 dark:text-secondary-50 tracking-tight">
+                        {settings?.storeName || 'SMS Admin'}
+                    </h1>
+                    <p className="text-secondary-500 dark:text-secondary-400 font-bold uppercase tracking-widest text-xs mt-2">
+                        Inventory Management System
+                    </p>
                 </div>
 
-                <Card padding="lg" className="border-none shadow-2xl ring-1 ring-secondary-200 dark:ring-secondary-800 bg-white/80 dark:bg-secondary-900/80 backdrop-blur-xl transform-gpu">
+                <Card padding="lg" className="border-none shadow-[0_20px_50px_rgba(0,0,0,0.1)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.3)] ring-1 ring-secondary-200/50 dark:ring-secondary-800 bg-white/80 dark:bg-secondary-900/80 backdrop-blur-xl rounded-[2.5rem]">
                     <form onSubmit={handleSubmit} className="space-y-6">
                         {error && (
-                            <div className="p-4 bg-danger-50 border border-danger-100 rounded-2xl flex items-center gap-3 text-danger-600 animate-in slide-in-from-top-2">
+                            <div className="p-4 bg-danger-50 dark:bg-danger-900/20 border border-danger-100 dark:border-danger-900/50 rounded-2xl flex items-center gap-3 text-danger-600 dark:text-danger-400 animate-in slide-in-from-top-2">
                                 <AlertCircle className="w-5 h-5 flex-shrink-0" />
                                 <p className="text-sm font-bold">{error}</p>
                             </div>
                         )}
 
                         <div className="space-y-4">
-                            <div className="relative">
-                                <User className="absolute left-4 top-[42px] w-5 h-5 text-secondary-400" />
-                                <Input
-                                    label="Username"
-                                    placeholder="Enter your username"
-                                    value={username}
-                                    onChange={e => setUsername(e.target.value)}
-                                    className="pl-12 bg-secondary-50 dark:bg-secondary-800 border-secondary-100 dark:border-secondary-700 text-secondary-900 dark:text-secondary-50 placeholder:text-secondary-400 h-14 rounded-2xl"
-                                    required
-                                />
-                            </div>
-
-                            <div className="relative">
-                                <Lock className="absolute left-4 top-[42px] w-5 h-5 text-secondary-400" />
-                                <Input
-                                    label="Password"
-                                    type="password"
-                                    placeholder="••••••••"
-                                    value={password}
-                                    onChange={e => setPassword(e.target.value)}
-                                    className="pl-12 bg-secondary-50 dark:bg-secondary-800 border-secondary-100 dark:border-secondary-700 text-secondary-900 dark:text-secondary-50 placeholder:text-secondary-400 h-14 rounded-2xl"
-                                    required
-                                />
-                            </div>
-                        </div>
-
-                        <div className="flex items-center justify-between text-sm">
-                            <label className="flex items-center gap-2 text-secondary-500 cursor-pointer group">
-                                <input type="checkbox" className="w-4 h-4 rounded border-secondary-200 dark:border-secondary-700 bg-secondary-50 dark:bg-secondary-800 text-primary-600 focus:ring-primary-600 focus:ring-offset-white dark:focus:ring-offset-secondary-900" />
-                                <span className="font-medium group-hover:text-secondary-900 dark:group-hover:text-secondary-50 transition-colors">Remember me</span>
-                            </label>
-                            <button type="button" className="text-primary-600 font-bold hover:text-primary-700 transition-colors">
-                                Forgot password?
-                            </button>
+                            <Input
+                                label="Username"
+                                placeholder="Enter your username"
+                                icon={<User className="w-5 h-5" />}
+                                value={username}
+                                onChange={e => setUsername(e.target.value)}
+                                required
+                                className="h-14 rounded-2xl bg-secondary-50/50 dark:bg-secondary-800/50 border-none ring-1 ring-secondary-200 dark:ring-secondary-700 focus:ring-2 focus:ring-primary-500 transition-all"
+                            />
+                            <Input
+                                label="Password"
+                                type="password"
+                                placeholder="••••••••"
+                                icon={<Lock className="w-5 h-5" />}
+                                value={password}
+                                onChange={e => setPassword(e.target.value)}
+                                required
+                                className="h-14 rounded-2xl bg-secondary-50/50 dark:bg-secondary-800/50 border-none ring-1 ring-secondary-200 dark:ring-secondary-700 focus:ring-2 focus:ring-primary-500 transition-all"
+                            />
                         </div>
 
                         <Button
                             type="submit"
-                            className="w-full h-14 text-lg font-black rounded-2xl shadow-xl shadow-primary-600/20"
+                            className="w-full py-7 text-lg font-black rounded-2xl shadow-xl shadow-primary-600/20 hover:shadow-2xl hover:shadow-primary-600/30 active:scale-[0.98] transition-all"
                             disabled={isLoading}
                         >
-                            {isLoading ? 'Signing in...' : 'Sign In'}
+                            {isLoading ? (
+                                <div className="flex items-center gap-3">
+                                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                                    <span>Verifying...</span>
+                                </div>
+                            ) : (
+                                'Sign In to Dashboard'
+                            )}
                         </Button>
                     </form>
                 </Card>
 
-                <p className="text-center mt-8 text-secondary-500 text-sm font-medium">
-                    Don't have an account? <button className="text-primary-600 font-black hover:text-primary-700 transition-colors">Contact Admin</button>
+                {/* Footer Link */}
+                <p className="text-center mt-8 text-secondary-500 dark:text-secondary-400 text-sm font-bold">
+                    Forgot password? <span className="text-primary-600 hover:text-primary-500 cursor-pointer">Contact Administrator</span>
                 </p>
             </div>
         </div>
     );
 };
-
-
-

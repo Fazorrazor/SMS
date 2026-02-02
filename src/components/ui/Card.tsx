@@ -11,8 +11,7 @@ export const Card = React.forwardRef<HTMLDivElement, CardProps>(
             none: '',
             sm: 'p-4',
             md: 'p-6',
-            lg: 'p-8',
-        };
+            lg: 'p-8' };
 
         return (
             <div
@@ -31,4 +30,5 @@ export const Card = React.forwardRef<HTMLDivElement, CardProps>(
 );
 
 Card.displayName = 'Card';
+
 
