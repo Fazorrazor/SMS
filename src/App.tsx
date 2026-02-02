@@ -31,7 +31,7 @@ function App() {
       <AuthProvider>
         <Toaster position="top-right" richColors />
         <ProductProvider>
-          <Router>
+          <Router basename="/sms_app">
             <Routes>
               <Route path="/login" element={<Login />} />
               <Route path="/" element={<ProtectedRoute><MainLayout /></ProtectedRoute>}>

@@ -58,9 +58,9 @@ export const ProductProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
         try {
             const [productsRes, salesRes, settingsRes] = await Promise.all([
-                fetch(`${API_URL}/products`),
-                fetch(`${API_URL}/sales`),
-                fetch(`${API_URL}/settings`)
+                fetch(`${API_URL}/products`, { headers: { "ngrok-skip-browser-warning": "69420" } }),
+                fetch(`${API_URL}/sales`, { headers: { "ngrok-skip-browser-warning": "69420" } }),
+                fetch(`${API_URL}/settings`, { headers: { "ngrok-skip-browser-warning": "69420" } })
             ]);
 
             if (productsRes.ok && salesRes.ok && settingsRes.ok) {
@@ -129,7 +129,10 @@ export const ProductProvider: React.FC<{ children: React.ReactNode }> = ({ child
         try {
             const res = await fetch(`${API_URL}/products`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    "ngrok-skip-browser-warning": "69420"
+                },
                 body: JSON.stringify(product)
             });
             if (res.ok) {
@@ -151,7 +154,10 @@ export const ProductProvider: React.FC<{ children: React.ReactNode }> = ({ child
             for (const product of products) {
                 await fetch(`${API_URL}/products`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: {
+                        'Content-Type': 'application/json',
+                        "ngrok-skip-browser-warning": "69420"
+                    },
                     body: JSON.stringify(product)
                 });
             }
@@ -167,7 +173,10 @@ export const ProductProvider: React.FC<{ children: React.ReactNode }> = ({ child
         try {
             const res = await fetch(`${API_URL}/products/${id}`, {
                 method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    "ngrok-skip-browser-warning": "69420"
+                },
                 body: JSON.stringify(product)
             });
             if (res.ok) {
@@ -185,7 +194,8 @@ export const ProductProvider: React.FC<{ children: React.ReactNode }> = ({ child
     const deleteProduct = async (id: string) => {
         try {
             const res = await fetch(`${API_URL}/products/${id}`, {
-                method: 'DELETE'
+                method: 'DELETE',
+                headers: { "ngrok-skip-browser-warning": "69420" }
             });
             if (res.ok) {
                 const data = await res.json();
@@ -205,7 +215,10 @@ export const ProductProvider: React.FC<{ children: React.ReactNode }> = ({ child
         try {
             const res = await fetch(`${API_URL}/products/${productId}/stock`, {
                 method: 'PATCH',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    "ngrok-skip-browser-warning": "69420"
+                },
                 body: JSON.stringify({ quantity })
             });
             if (res.ok) {
@@ -220,7 +233,10 @@ export const ProductProvider: React.FC<{ children: React.ReactNode }> = ({ child
         try {
             const res = await fetch(`${API_URL}/sales`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    "ngrok-skip-browser-warning": "69420"
+                },
                 body: JSON.stringify(sale)
             });
             if (res.ok) {
@@ -238,7 +254,8 @@ export const ProductProvider: React.FC<{ children: React.ReactNode }> = ({ child
     const voidSale = async (id: string) => {
         try {
             const res = await fetch(`${API_URL}/sales/${id}`, {
-                method: 'DELETE'
+                method: 'DELETE',
+                headers: { "ngrok-skip-browser-warning": "69420" }
             });
             if (res.ok) {
                 await refreshData(true);

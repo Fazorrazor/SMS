@@ -37,7 +37,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     const refreshUsers = async () => {
         try {
-            const res = await fetch(`${API_URL}/users`);
+            const res = await fetch(`${API_URL}/users`, {
+                headers: { "ngrok-skip-browser-warning": "69420" }
+            });
             if (res.ok) {
                 const data = await res.json();
                 setUsers(data);
@@ -61,7 +63,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         try {
             const res = await fetch(`${API_URL}/login`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    "ngrok-skip-browser-warning": "69420"
+                },
                 body: JSON.stringify({ username, password })
             });
 
@@ -91,7 +96,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         try {
             const res = await fetch(`${API_URL}/users`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    "ngrok-skip-browser-warning": "69420"
+                },
                 body: JSON.stringify(userData)
             });
             if (res.ok) {
@@ -110,7 +118,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         try {
             const res = await fetch(`${API_URL}/users/${id}`, {
                 method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    "ngrok-skip-browser-warning": "69420"
+                },
                 body: JSON.stringify(data)
             });
             if (res.ok) {
@@ -139,7 +150,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const deleteUser = async (id: string) => {
         try {
             const res = await fetch(`${API_URL}/users/${id}`, {
-                method: 'DELETE'
+                method: 'DELETE',
+                headers: { "ngrok-skip-browser-warning": "69420" }
             });
             if (res.ok) {
                 await refreshUsers();
@@ -158,7 +170,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         try {
             const res = await fetch(`${API_URL}/login`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    "ngrok-skip-browser-warning": "69420"
+                },
                 body: JSON.stringify({ username: user.username, password })
             });
             return res.ok;
