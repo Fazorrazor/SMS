@@ -19,7 +19,9 @@ export const Login = () => {
         const fetchSettings = async () => {
             const apiBase = import.meta.env.VITE_API_URL || '';
             try {
-                const res = await fetch(`${apiBase}/api/settings`);
+                const res = await fetch(`${apiBase}/api/settings`, {
+                    headers: { "ngrok-skip-browser-warning": "69420" }
+                });
                 if (res.ok) {
                     const data = await res.json();
                     setSettings(data);
@@ -131,4 +133,5 @@ export const Login = () => {
         </div>
     );
 };
+
 
