@@ -84,7 +84,11 @@ export const ProductProvider: React.FC<{ children: React.ReactNode }> = ({ child
     useEffect(() => {
         refreshData(true);
 
-        const socket = io(API_BASE);
+        const socket = io(API_BASE, {
+            extraHeaders: {
+                "ngrok-skip-browser-warning": "69420"
+            }
+        });
 
         socket.on('connect', () => {
             setIsOnline(true);
