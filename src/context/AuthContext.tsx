@@ -63,7 +63,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         try {
             const res = await fetch(`${API_URL}/login`, {
                 method: 'POST',
-                headers: {
+                headers: { "ngrok-skip-browser-warning": "69420", 
                     'Content-Type': 'application/json',
                     "ngrok-skip-browser-warning": "69420"
                 },
@@ -96,7 +96,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         try {
             const res = await fetch(`${API_URL}/users`, {
                 method: 'POST',
-                headers: {
+                headers: { "ngrok-skip-browser-warning": "69420", 
                     'Content-Type': 'application/json',
                     "ngrok-skip-browser-warning": "69420"
                 },
@@ -118,7 +118,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         try {
             const res = await fetch(`${API_URL}/users/${id}`, {
                 method: 'PUT',
-                headers: {
+                headers: { "ngrok-skip-browser-warning": "69420", 
                     'Content-Type': 'application/json',
                     "ngrok-skip-browser-warning": "69420"
                 },
@@ -170,7 +170,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         try {
             const res = await fetch(`${API_URL}/login`, {
                 method: 'POST',
-                headers: {
+                headers: { "ngrok-skip-browser-warning": "69420", 
                     'Content-Type': 'application/json',
                     "ngrok-skip-browser-warning": "69420"
                 },
@@ -210,4 +210,5 @@ export const useAuth = () => {
     }
     return context;
 };
+
 

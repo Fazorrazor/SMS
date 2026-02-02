@@ -159,8 +159,8 @@ export const ProductProvider: React.FC<{ children: React.ReactNode }> = ({ child
                 await fetch(`${API_URL}/products`, {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json',
-                        "ngrok-skip-browser-warning": "69420"
+                        "ngrok-skip-browser-warning": "69420",
+                        'Content-Type': 'application/json'
                     },
                     body: JSON.stringify(product)
                 });
@@ -178,8 +178,8 @@ export const ProductProvider: React.FC<{ children: React.ReactNode }> = ({ child
             const res = await fetch(`${API_URL}/products/${id}`, {
                 method: 'PUT',
                 headers: {
-                    'Content-Type': 'application/json',
-                    "ngrok-skip-browser-warning": "69420"
+                    "ngrok-skip-browser-warning": "69420",
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(product)
             });
@@ -220,8 +220,8 @@ export const ProductProvider: React.FC<{ children: React.ReactNode }> = ({ child
             const res = await fetch(`${API_URL}/products/${productId}/stock`, {
                 method: 'PATCH',
                 headers: {
-                    'Content-Type': 'application/json',
-                    "ngrok-skip-browser-warning": "69420"
+                    "ngrok-skip-browser-warning": "69420",
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ quantity })
             });
@@ -238,8 +238,8 @@ export const ProductProvider: React.FC<{ children: React.ReactNode }> = ({ child
             const res = await fetch(`${API_URL}/sales`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
-                    "ngrok-skip-browser-warning": "69420"
+                    "ngrok-skip-browser-warning": "69420",
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(sale)
             });
@@ -301,4 +301,5 @@ export const useProducts = () => {
     }
     return context;
 };
+
 

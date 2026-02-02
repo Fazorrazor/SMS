@@ -72,7 +72,7 @@ export const Products = () => {
     useEffect(() => {
         const fetchSettings = async () => {
             try {
-                const res = await fetch(`${import.meta.env.VITE_API_URL || ""}/api/settings`);
+                const res = await fetch(`${import.meta.env.VITE_API_URL || ""}/api/settings`, { headers: { "ngrok-skip-browser-warning": "69420" } });
                 if (res.ok) {
                     const data = await res.json();
                     setSettings(data);
@@ -884,6 +884,7 @@ export const Products = () => {
         </div>
     );
 };
+
 
 
 

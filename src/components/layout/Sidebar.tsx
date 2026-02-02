@@ -135,3 +135,4 @@ export const Sidebar = ({ onClose }: SidebarProps) => {
         </div>
     );
 };
+
