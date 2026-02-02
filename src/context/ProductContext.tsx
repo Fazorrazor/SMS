@@ -41,7 +41,7 @@ interface ProductContextType {
 
 const ProductContext = createContext<ProductContextType | undefined>(undefined);
 
-const API_BASE = import.meta.env.VITE_API_URL || '';
+const API_BASE = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '');
 const API_URL = `${API_BASE}/api`;
 
 export const ProductProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
