@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo, useRef } from 'react';
+import { API_URL } from '../config';
 import { createPortal } from 'react-dom';
 import { useProducts, type Product } from '../context/ProductContext';
 import { useAuth } from '../context/AuthContext';
@@ -9,7 +10,7 @@ import { Modal } from '../components/ui/Modal';
 import { Input } from '../components/ui/Input';
 import { formatStock } from '../lib/utils';
 import { Dropdown } from '../components/ui/Dropdown';
-import { Plus, Search, Filter, Package, Tag, Layers, AlertCircle, ChevronDown, Lock, Trash2 } from 'lucide-react';
+import { Plus, Search, Filter, Package, Tag, Layers, AlertCircle, ChevronDown, Lock, Trash2, Edit3 } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { useStickyOverlay } from '../hooks/useStickyOverlay';
 
@@ -34,6 +35,7 @@ export const Products = () => {
     const [unitSearch, setUnitSearch] = useState('');
     const [unitQuantity, setUnitQuantity] = useState<string>('');
     const [error, setError] = useState<string | null>(null);
+    const [searchQuery, setSearchQuery] = useState('');
 
     // Coordinate tracking for sticky overlays using unified hook
     const nameInputRef = useRef<HTMLDivElement>(null);
@@ -72,7 +74,7 @@ export const Products = () => {
     useEffect(() => {
         const fetchSettings = async () => {
             try {
-                const res = await fetch(`/api/settings`);
+                const res = await fetch(`${API_URL}/settings`);
                 if (res.ok) {
                     const data = await res.json();
                     setSettings(data);
@@ -97,6 +99,16 @@ export const Products = () => {
         const search = unitSearch.toLowerCase();
         return COMMON_UNITS.filter(u => u.toLowerCase().includes(search));
     }, [unitSearch]);
+
+    const filteredProducts = useMemo(() => {
+        const query = searchQuery.toLowerCase().trim();
+        if (!query) return products;
+        return products.filter(p =>
+            p.name.toLowerCase().includes(query) ||
+            p.sku.toLowerCase().includes(query) ||
+            p.category.toLowerCase().includes(query)
+        );
+    }, [searchQuery, products]);
 
     const handleSelectSuggestion = (product: any) => {
         setNewProduct({
@@ -238,23 +250,23 @@ export const Products = () => {
     };
 
     return (
-        <div className="max-w-7xl mx-auto space-y-8">
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div className="w-full space-y-8 animate-in fade-in duration-500 pb-12">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
                 <div>
-                    <h1 className="text-3xl font-extrabold tracking-tight text-secondary-900 dark:text-secondary-50">Products</h1>
-                    <p className="mt-2 text-base text-secondary-500 dark:text-secondary-400">Manage your product catalog and pricing.</p>
+                    <h1 className="text-2xl font-bold text-secondary-900 dark:text-secondary-50 tracking-tight font-display">Products</h1>
+                    <p className="text-sm font-medium text-secondary-500 dark:text-secondary-400 mt-0.5">Manage your product catalog and pricing.</p>
                 </div>
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2">
                     <Button
                         variant="secondary"
                         onClick={() => {
                             resetForm();
                             setIsBulkAddModalOpen(true);
                         }}
-                        size="lg"
-                        className="shadow-sm"
+                        size="md"
+                        className="shadow-sm active:scale-95 text-xs font-bold"
                     >
-                        <Layers className="w-5 h-5 mr-2" />
+                        <Layers className="w-4 h-4 mr-2" />
                         Bulk Add
                     </Button>
                     <Button
@@ -262,10 +274,10 @@ export const Products = () => {
                             resetForm();
                             setIsAddModalOpen(true);
                         }}
-                        size="lg"
-                        className="shadow-primary-600/20"
+                        size="md"
+                        className="shadow-lg shadow-primary-600/10 active:scale-95 text-xs font-bold ring-2 ring-primary-500/10"
                     >
-                        <Plus className="w-5 h-5 mr-2" />
+                        <Plus className="w-4 h-4 mr-2" />
                         Add Product
                     </Button>
                 </div>
@@ -600,197 +612,185 @@ export const Products = () => {
                 </div>
             </Modal>
 
-            {/* Filters & Search */}
-            <Card padding="md" className="border-none shadow-sm ring-1 ring-secondary-200/50 dark:ring-secondary-800 bg-white dark:bg-secondary-900">
-                <div className="flex flex-col md:flex-row gap-4">
-                    <div className="relative flex-1">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-secondary-400" />
-                        <input
-                            type="text"
-                            placeholder="Search products..."
-                            className="w-full pl-10 pr-4 py-2.5 bg-secondary-50 dark:bg-secondary-800 border-none ring-1 ring-secondary-200 dark:ring-secondary-700 rounded-xl focus:ring-2 focus:ring-primary-500 transition-all outline-none text-secondary-900 dark:text-secondary-50 placeholder:text-secondary-400"
-                        />
-                    </div>
-                    <div className="flex gap-3">
-                        <button className="inline-flex items-center px-4 py-2.5 bg-white dark:bg-secondary-900 ring-1 ring-secondary-200 dark:ring-secondary-800 text-secondary-700 dark:text-secondary-300 font-semibold rounded-xl hover:bg-secondary-50 dark:hover:bg-secondary-800 transition-all">
-                            <Filter className="w-5 h-5 mr-2" />
-                            Filters
+            {/* Inventory Controls */}
+            <Card padding="none" className="border-none shadow-xl ring-1 ring-secondary-200/50 dark:ring-secondary-800 bg-white dark:bg-secondary-900 overflow-hidden rounded-[2rem]">
+                <div className="p-4 sm:p-5 border-b border-secondary-100 dark:border-secondary-800">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div className="relative flex-1 group">
+                            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-secondary-400 group-focus-within:text-primary-500 transition-colors" />
+                            <input
+                                type="text"
+                                placeholder="Search products by name or code..."
+                                value={searchQuery}
+                                onChange={e => setSearchQuery(e.target.value)}
+                                className="w-full pl-11 pr-4 py-2.5 bg-secondary-50/50 dark:bg-secondary-800/50 border-none ring-1 ring-secondary-200/50 dark:ring-secondary-800 rounded-2xl focus:ring-2 focus:ring-primary-500/50 transition-all outline-none text-sm font-medium text-secondary-900 dark:text-secondary-50 placeholder:text-secondary-400"
+                            />
+                        </div>
+                        <button className="flex items-center justify-center gap-2 px-6 py-2.5 bg-secondary-50/50 dark:bg-secondary-800/50 hover:bg-secondary-100 dark:hover:bg-secondary-700 rounded-2xl font-bold text-xs text-secondary-400 hover:text-secondary-600 transition-all ring-1 ring-secondary-200/50 dark:ring-secondary-800">
+                            <Filter className="w-4 h-4" />
+                            <span>Filters</span>
                         </button>
                     </div>
                 </div>
-            </Card>
-
-            {/* Product Table */}
-            <Card padding="none" className="border-none shadow-sm ring-1 ring-secondary-200/50 dark:ring-secondary-800 overflow-hidden bg-white dark:bg-secondary-900">
-                {isLoading ? (
-                    <div className="p-6 space-y-4">
-                        <div className="flex gap-4 pb-4 border-b border-secondary-100 dark:border-secondary-800">
-                            <Skeleton variant="text" className="h-6 flex-1" />
-                            <Skeleton variant="text" className="h-6 flex-1" />
-                            <Skeleton variant="text" className="h-6 flex-1" />
-                            <Skeleton variant="text" className="h-6 w-24" />
+                <div className="p-0">
+                    {isLoading ? (
+                        <div className="p-8 space-y-4">
+                            {[1, 2, 3, 4, 5].map(i => <Skeleton key={i} className="h-16 w-full rounded-2xl" />)}
                         </div>
-                        {[...Array(5)].map((_, i) => (
-                            <div key={i} className="flex gap-4 py-4 border-b border-secondary-50 dark:border-secondary-800 last:border-0">
-                                <Skeleton variant="rounded" className="h-12 flex-1" />
-                                <Skeleton variant="rounded" className="h-12 flex-1" />
-                                <Skeleton variant="rounded" className="h-12 flex-1" />
-                                <Skeleton variant="rounded" className="h-12 w-24" />
+                    ) : products.length === 0 ? (
+                        <div className="p-20 text-center">
+                            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-secondary-100 dark:bg-secondary-800 mb-4">
+                                <Package className="w-8 h-8 text-secondary-400 dark:text-secondary-500" />
                             </div>
-                        ))}
-                    </div>
-                ) : products.length === 0 ? (
-                    <div className="p-20 text-center">
-                        <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-secondary-100 dark:bg-secondary-800 mb-4">
-                            <Package className="w-8 h-8 text-secondary-400 dark:text-secondary-500" />
+                            <p className="text-secondary-500 font-medium">No products found. Start by adding your first product.</p>
                         </div>
-                        <p className="text-secondary-500 font-medium">No products found. Start by adding your first product.</p>
-                    </div>
-                ) : (
-                    <>
-                        {/* Desktop Table View */}
-                        <div className="hidden md:block overflow-x-auto">
-                            <table className="w-full text-left border-collapse">
-                                <thead>
-                                    <tr className="bg-secondary-50/50 dark:bg-secondary-800/50 border-b border-secondary-100 dark:border-secondary-800">
-                                        <th className="px-4 py-3 text-[10px] font-bold text-secondary-500 uppercase tracking-wider min-w-[150px]">Product</th>
-                                        <th className="px-4 py-3 text-[10px] font-bold text-secondary-500 uppercase tracking-wider min-w-[100px]">Category</th>
-                                        <th className="px-4 py-3 text-[10px] font-bold text-secondary-500 uppercase tracking-wider min-w-[120px]">Price</th>
-                                        <th className="px-4 py-3 text-[10px] font-bold text-secondary-500 uppercase tracking-wider min-w-[100px]">Stock</th>
-                                        <th className="px-4 py-3 text-[10px] font-bold text-secondary-500 uppercase tracking-wider text-right">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody className="divide-y divide-secondary-100 dark:divide-secondary-800">
-                                    {products.map((product) => (
-                                        <tr key={product.id} className="hover:bg-secondary-50/50 dark:hover:bg-secondary-800/50 transition-colors group">
-                                            <td className="px-4 py-3">
-                                                <div className="flex flex-col">
-                                                    <p className="font-bold text-secondary-900 dark:text-secondary-50 text-sm truncate max-w-[200px]" title={product.name}>{product.name}</p>
-                                                    <span className="text-[9px] text-secondary-400 font-bold uppercase tracking-wider">{product.sku}</span>
-                                                </div>
-                                            </td>
-                                            <td className="px-4 py-3">
-                                                <span className="px-2 py-0.5 bg-secondary-100 dark:bg-secondary-800 text-secondary-700 dark:text-secondary-300 text-[10px] font-bold rounded-lg uppercase tracking-wider">
-                                                    {product.category}
-                                                </span>
-                                            </td>
-                                            <td className="px-4 py-3">
-                                                <div className="flex flex-col">
-                                                    <span className="font-bold text-secondary-900 dark:text-secondary-50 text-sm">{currency}{product.sellingPrice.toFixed(2)}</span>
-                                                    {(product.halfPrice || product.quarterPrice) && (
-                                                        <div className="flex gap-2 mt-0.5">
-                                                            {product.halfPrice && (
-                                                                <span className="text-[9px] font-bold text-secondary-400">H: {currency}{product.halfPrice.toFixed(2)}</span>
-                                                            )}
-                                                            {product.quarterPrice && (
-                                                                <span className="text-[9px] font-bold text-secondary-400">Q: {currency}{product.quarterPrice.toFixed(2)}</span>
-                                                            )}
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            </td>
-                                            <td className="px-4 py-3">
-                                                <div className="flex flex-col">
-                                                    <span className={cn(
-                                                        "px-2 py-0.5 rounded-lg text-[10px] font-bold inline-block",
-                                                        product.stock <= (settings ? parseFloat(settings.lowStockThreshold) || 5 : 5) ? "bg-danger-50 dark:bg-danger-900/20 text-danger-700 dark:text-danger-400" : "bg-success-50 dark:bg-success-900/20 text-success-700 dark:text-success-400"
-                                                    )}>
-                                                        {formatStock(product.stock, product.unit || 'Pack')}
-                                                    </span>
-                                                    <span className="text-[9px] text-secondary-400 font-bold mt-0.5">
-                                                        ({product.stock.toFixed(2)} total)
-                                                    </span>
-                                                </div>
-                                            </td>
-                                            <td className="px-4 py-3 text-right">
-                                                <div className="flex items-center justify-end gap-2">
-                                                    <Button
-                                                        variant="ghost"
-                                                        size="sm"
-                                                        className="h-8 text-primary-600 hover:bg-primary-50 hover:text-primary-700 text-xs"
-                                                        onClick={() => handleEditProduct(product)}
-                                                    >
-                                                        Edit
-                                                    </Button>
-                                                    <Button
-                                                        variant="ghost"
-                                                        size="sm"
-                                                        className="h-8 text-danger-600 hover:bg-danger-50 hover:text-danger-700 text-xs"
-                                                        onClick={() => {
-                                                            setProductToDelete(product.id);
-                                                            setIsDeleteModalOpen(true);
-                                                            setDeletePassword('');
-                                                            setError(null);
-                                                        }}
-                                                    >
-                                                        Delete
-                                                    </Button>
-                                                </div>
-                                            </td>
+                    ) : (
+                        <>
+                            {/* Desktop Table View - Now triggered at 'sm' breakpoint (640px) */}
+                            <div className="hidden sm:block overflow-x-auto">
+                                <table className="w-full text-left border-collapse">
+                                    <thead>
+                                        <tr className="bg-secondary-50/30 dark:bg-secondary-800/30">
+                                            <th className="px-6 py-4 text-[10px] font-bold text-secondary-400 uppercase tracking-widest min-w-[150px]">Product</th>
+                                            <th className="px-6 py-4 text-[10px] font-bold text-secondary-400 uppercase tracking-widest min-w-[100px]">Category</th>
+                                            <th className="px-6 py-4 text-[10px] font-bold text-secondary-400 uppercase tracking-widest min-w-[120px]">Price</th>
+                                            <th className="px-6 py-4 text-[10px] font-bold text-secondary-400 uppercase tracking-widest min-w-[100px]">Stock</th>
+                                            <th className="px-6 py-4 text-[10px] font-bold text-secondary-400 uppercase tracking-widest text-right">Actions</th>
                                         </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
+                                    </thead>
+                                    <tbody className="divide-y divide-secondary-50 dark:divide-secondary-800">
+                                        {filteredProducts.map((product) => (
+                                            <tr key={product.id} className="hover:bg-secondary-50/30 dark:hover:bg-secondary-800/30 transition-colors group">
+                                                <td className="px-6 py-4">
+                                                    <div className="flex flex-col">
+                                                        <p className="font-bold text-secondary-900 dark:text-secondary-50 text-sm truncate max-w-[200px]" title={product.name}>{product.name}</p>
+                                                        <span className="text-[9px] text-secondary-400 font-bold uppercase tracking-widest mt-0.5">{product.sku}</span>
+                                                    </div>
+                                                </td>
+                                                <td className="px-6 py-4">
+                                                    <span className="px-2 py-0.5 bg-secondary-50 dark:bg-secondary-800 border border-secondary-200/50 dark:border-secondary-700 text-secondary-600 dark:text-secondary-400 text-[10px] font-bold rounded-lg uppercase tracking-wider">
+                                                        {product.category}
+                                                    </span>
+                                                </td>
+                                                <td className="px-6 py-4">
+                                                    <div className="flex flex-col">
+                                                        <span className="font-bold text-secondary-900 dark:text-secondary-50 text-sm">{currency}{product.sellingPrice.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                                                        {(product.halfPrice || product.quarterPrice) && (
+                                                            <div className="flex gap-2 mt-0.5">
+                                                                {product.halfPrice && (
+                                                                    <span className="text-[9px] font-bold text-secondary-400">H: {currency}{product.halfPrice.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                                                                )}
+                                                                {product.quarterPrice && (
+                                                                    <span className="text-[9px] font-bold text-secondary-400">Q: {currency}{product.quarterPrice.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                                                                )}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </td>
+                                                <td className="px-6 py-4">
+                                                    <div className="flex flex-col">
+                                                        <span className={cn(
+                                                            "px-2 py-0.5 rounded-lg text-[10px] font-bold inline-block w-fit",
+                                                            product.stock <= (settings ? parseFloat(settings.lowStockThreshold) || 5 : 5) ? "bg-danger-50 dark:bg-danger-900/20 text-danger-700 dark:text-danger-400" : "bg-success-50 dark:bg-success-900/20 text-success-700 dark:text-success-400"
+                                                        )}>
+                                                            {formatStock(product.stock, product.unit || 'Pack')}
+                                                        </span>
+                                                        <span className="text-[9px] text-secondary-400 font-bold mt-1">
+                                                            ({product.stock.toLocaleString()} total)
+                                                        </span>
+                                                    </div>
+                                                </td>
+                                                <td className="px-6 py-4 text-right">
+                                                    <div className="flex items-center justify-end gap-1">
+                                                        <button
+                                                            onClick={() => handleEditProduct(product)}
+                                                            className="p-2 hover:bg-white dark:hover:bg-secondary-800 hover:shadow-md hover:ring-1 hover:ring-secondary-200 dark:hover:ring-secondary-700 rounded-xl transition-all text-secondary-400 hover:text-primary-600"
+                                                            title="Edit Product"
+                                                        >
+                                                            <Edit3 className="w-4 h-4" />
+                                                        </button>
+                                                        <button
+                                                            onClick={() => {
+                                                                setProductToDelete(product.id);
+                                                                setIsDeleteModalOpen(true);
+                                                                setDeletePassword('');
+                                                                setError(null);
+                                                            }}
+                                                            className="p-2 hover:bg-danger-50 dark:hover:bg-danger-900/20 rounded-xl transition-all text-secondary-400 hover:text-danger-600"
+                                                            title="Delete Product"
+                                                        >
+                                                            <Trash2 className="w-4 h-4" />
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
 
-                        {/* Mobile Card View */}
-                        <div className="md:hidden divide-y divide-secondary-100 dark:divide-secondary-800">
-                            {products.map((product) => (
-                                <div key={product.id} className="p-4 hover:bg-secondary-50/50 dark:hover:bg-secondary-800/50 transition-colors">
-                                    <div className="flex items-start justify-between gap-4 mb-3">
-                                        <div className="flex-1 min-w-0">
-                                            <h3 className="font-bold text-secondary-900 dark:text-secondary-50 truncate">{product.name}</h3>
-                                            <p className="text-[10px] text-secondary-400 font-bold uppercase tracking-wider mt-0.5">{product.sku}</p>
-                                        </div>
-                                        <span className="px-2.5 py-1 bg-secondary-100 dark:bg-secondary-800 text-secondary-700 dark:text-secondary-300 text-[10px] font-bold rounded-lg uppercase tracking-wider flex-shrink-0">
-                                            {product.category}
-                                        </span>
-                                    </div>
-
-                                    <div className="grid grid-cols-2 gap-3 mb-3">
-                                        <div>
-                                            <p className="text-[10px] font-bold text-secondary-400 uppercase tracking-wider mb-1">Price</p>
-                                            <p className="font-bold text-secondary-900 dark:text-secondary-50">{currency}{product.sellingPrice.toFixed(2)}</p>
-                                            {(product.halfPrice || product.quarterPrice) && (
-                                                <div className="flex gap-2 mt-1">
-                                                    {product.halfPrice && (
-                                                        <span className="text-[9px] font-bold text-secondary-400">H: {currency}{product.halfPrice.toFixed(2)}</span>
-                                                    )}
-                                                    {product.quarterPrice && (
-                                                        <span className="text-[9px] font-bold text-secondary-400">Q: {currency}{product.quarterPrice.toFixed(2)}</span>
-                                                    )}
+                            {/* Mobile Card View - Only for super small devices */}
+                            <div className="sm:hidden divide-y divide-secondary-100 dark:divide-secondary-800">
+                                {filteredProducts.map((product) => (
+                                    <div key={product.id} className="p-5 hover:bg-secondary-50/50 dark:hover:bg-secondary-800/50 transition-colors">
+                                        <div className="flex items-start justify-between gap-4 mb-4">
+                                            <div className="flex-1 min-w-0">
+                                                <div className="flex items-center gap-2 mb-1">
+                                                    <h3 className="font-bold text-secondary-900 dark:text-secondary-50 truncate text-base">{product.name}</h3>
+                                                    <span className="px-2 py-0.5 bg-secondary-50 dark:bg-secondary-800 border border-secondary-200/50 dark:border-secondary-700 text-secondary-500 dark:text-secondary-400 text-[9px] font-bold rounded-md uppercase tracking-wider flex-shrink-0">
+                                                        {product.category}
+                                                    </span>
                                                 </div>
-                                            )}
+                                                <p className="text-[10px] text-secondary-400 font-bold uppercase tracking-widest">{product.sku}</p>
+                                            </div>
+                                            <div className="flex flex-col items-end gap-1">
+                                                <span className="font-bold text-secondary-900 dark:text-secondary-50 text-sm">
+                                                    {currency}{product.sellingPrice.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                                </span>
+                                                {product.stock <= (settings ? parseFloat(settings.lowStockThreshold) || 5 : 5) && (
+                                                    <span className="text-danger-600 dark:text-danger-400 font-bold text-[9px] uppercase tracking-wider flex items-center gap-1">
+                                                        <AlertCircle className="w-3 h-3" /> Low Stock
+                                                    </span>
+                                                )}
+                                            </div>
                                         </div>
-                                        <div>
-                                            <p className="text-[10px] font-bold text-secondary-400 uppercase tracking-wider mb-1">Stock</p>
-                                            <span className={cn(
-                                                "px-2.5 py-1 rounded-lg text-[11px] font-bold inline-block",
-                                                product.stock <= (settings ? parseFloat(settings.lowStockThreshold) || 5 : 5) ? "bg-danger-50 dark:bg-danger-900/20 text-danger-700 dark:text-danger-400" : "bg-success-50 dark:bg-success-900/20 text-success-700 dark:text-success-400"
-                                            )}>
-                                                {formatStock(product.stock, product.unit || 'Pack')}
-                                            </span>
+
+                                        <div className="flex items-center justify-between">
+                                            <div>
+                                                <p className="text-[10px] font-bold text-secondary-400 uppercase tracking-widest mb-1.5">Current Stock</p>
+                                                <span className={cn(
+                                                    "px-2.5 py-1 rounded-lg text-[11px] font-bold inline-block",
+                                                    product.stock <= (settings ? parseFloat(settings.lowStockThreshold) || 5 : 5) ? "bg-danger-50 dark:bg-danger-900/20 text-danger-700 dark:text-danger-400" : "bg-success-50 dark:bg-success-900/20 text-success-700 dark:text-success-400"
+                                                )}>
+                                                    {formatStock(product.stock, product.unit || 'Pack')}
+                                                </span>
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                <button
+                                                    onClick={() => handleEditProduct(product)}
+                                                    className="w-10 h-10 bg-secondary-50 dark:bg-secondary-800 hover:bg-white dark:hover:bg-secondary-700 hover:shadow-md hover:ring-1 hover:ring-secondary-200 dark:hover:ring-secondary-600 rounded-xl flex items-center justify-center transition-all active:scale-95 text-secondary-400 hover:text-primary-600"
+                                                >
+                                                    <Edit3 className="w-4 h-4" />
+                                                </button>
+                                                <button
+                                                    onClick={() => {
+                                                        setProductToDelete(product.id);
+                                                        setIsDeleteModalOpen(true);
+                                                        setDeletePassword('');
+                                                        setError(null);
+                                                    }}
+                                                    className="w-10 h-10 bg-secondary-50 dark:bg-secondary-800 hover:bg-danger-50 dark:hover:bg-danger-900/20 rounded-xl flex items-center justify-center transition-all active:scale-95 text-secondary-400 hover:text-danger-600"
+                                                >
+                                                    <Trash2 className="w-4 h-4" />
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
-
-                                    <Button
-                                        variant="ghost"
-                                        size="sm"
-                                        className="w-full text-danger-600 hover:bg-danger-50 hover:text-danger-700"
-                                        onClick={() => {
-                                            setProductToDelete(product.id);
-                                            setIsDeleteModalOpen(true);
-                                            setDeletePassword('');
-                                            setError(null);
-                                        }}
-                                    >
-                                        Delete Product
-                                    </Button>
-                                </div>
-                            ))}
-                        </div>
-                    </>
-                )}
+                                ))}
+                            </div>
+                        </>
+                    )}
+                </div>
             </Card>
 
             {/* Secure Delete Modal */}

@@ -1,4 +1,5 @@
 import { useMemo, useState, useEffect } from 'react';
+import { API_URL } from '../config';
 import { Card } from '../components/ui/Card';
 import { Modal } from '../components/ui/Modal';
 import { useProducts } from '../context/ProductContext';
@@ -107,7 +108,7 @@ export const Sales = () => {
     useEffect(() => {
         const fetchSettings = async () => {
             try {
-                const res = await fetch(`/api/settings`);
+                const res = await fetch(`${API_URL}/settings`);
                 if (res.ok) {
                     const data = await res.json();
                     setSettings(data);

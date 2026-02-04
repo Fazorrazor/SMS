@@ -193,73 +193,115 @@ export const Inventory = () => {
     const outOfStockCount = products.filter(p => getStockStatus(p.stock) === 'out').length;
 
     return (
-        <div className="max-w-7xl mx-auto space-y-8 animate-in fade-in duration-500 pb-12">
+        <div className="w-full space-y-8 animate-in fade-in duration-500 pb-12">
             {/* Header */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
                 <div>
-                    <h1 className="text-3xl font-black text-secondary-900 dark:text-secondary-50 tracking-tight">Inventory Management</h1>
-                    <p className="text-secondary-500 dark:text-secondary-400 font-medium mt-1">Monitor stock levels and perform manual adjustments.</p>
+                    <h1 className="text-2xl font-bold text-secondary-900 dark:text-secondary-50 tracking-tight font-display">Inventory Management</h1>
+                    <p className="text-sm font-medium text-secondary-500 dark:text-secondary-400 mt-0.5">Monitor stock levels and perform manual adjustments.</p>
                 </div>
-                <div className="flex items-center gap-3 flex-wrap">
+                <div className="flex items-center gap-3">
                     {stockHistory.length > 0 && (
-                        <button
+                        <Button
+                            variant="secondary"
                             onClick={() => setShowHistory(!showHistory)}
-                            className="flex items-center gap-2 px-4 py-2.5 bg-white dark:bg-secondary-900 ring-1 ring-secondary-200 dark:ring-secondary-800 rounded-xl font-bold text-secondary-600 dark:text-secondary-400 hover:bg-secondary-50 dark:hover:bg-secondary-800 transition-all"
+                            className="shadow-sm active:scale-95 whitespace-nowrap"
                         >
-                            <Undo2 className="w-4 h-4" />
+                            <Undo2 className="w-4 h-4 mr-2" />
                             History ({stockHistory.length})
-                        </button>
+                        </Button>
                     )}
-                    <button
+                    <Button
+                        variant="secondary"
                         onClick={handleExport}
-                        className="flex items-center gap-2 px-4 py-2.5 bg-white dark:bg-secondary-900 ring-1 ring-secondary-200 dark:ring-secondary-800 rounded-xl font-bold text-secondary-600 dark:text-secondary-400 hover:bg-secondary-50 dark:hover:bg-secondary-800 transition-all"
+                        className="shadow-sm active:scale-95 whitespace-nowrap"
                     >
-                        <Download className="w-4 h-4" />
+                        <Download className="w-4 h-4 mr-2" />
                         <span className="hidden sm:inline">Export CSV</span>
-                    </button>
-                    <button
+                    </Button>
+                    <Button
                         onClick={() => setIsAdjustOpen(true)}
-                        className="flex items-center gap-2 px-4 py-2.5 bg-primary-600 rounded-xl font-bold text-white shadow-lg shadow-primary-600/20 hover:bg-primary-700 transition-all"
+                        className="shadow-xl shadow-primary-600/20 active:scale-95 whitespace-nowrap"
                     >
-                        <ArrowUpDown className="w-4 h-4" />
+                        <ArrowUpDown className="w-4 h-4 mr-2" />
                         <span className="hidden sm:inline">Stock Adjustment</span>
                         <span className="sm:hidden">Adjust</span>
-                    </button>
+                    </Button>
                 </div>
             </div>
 
             {/* Stats Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <Card padding="md" className="border-none shadow-sm ring-1 ring-secondary-200/50 dark:ring-secondary-800">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                <Card padding="sm" className="border-none shadow-sm ring-1 ring-secondary-200/50 dark:ring-secondary-800 col-span-2 md:col-span-1">
                     <div className="flex items-center justify-between">
                         <div>
-                            <p className="text-xs font-bold text-secondary-400 uppercase tracking-wider">Total Products</p>
-                            <p className="text-2xl font-black text-secondary-900 dark:text-secondary-50 mt-1">{products.length}</p>
+                            <p className="text-[10px] font-bold text-secondary-400 uppercase tracking-wider">Total Products</p>
+                            <p className="text-xl font-bold text-secondary-900 dark:text-secondary-50 mt-0.5">{products.length}</p>
                         </div>
-                        <div className="w-12 h-12 bg-primary-50 dark:bg-primary-900/20 rounded-xl flex items-center justify-center">
-                            <Package className="w-6 h-6 text-primary-600 dark:text-primary-400" />
+                        <div className="w-10 h-10 bg-secondary-50 dark:bg-secondary-900/20 rounded-xl flex items-center justify-center">
+                            <Package className="w-5 h-5 text-secondary-400" />
                         </div>
                     </div>
                 </Card>
-                <Card padding="md" className="border-none shadow-sm ring-1 ring-warning-200/50 dark:ring-warning-800/50 bg-warning-50/30 dark:bg-warning-900/10">
+                <Card
+                    padding="sm"
+                    className={cn(
+                        "border-none shadow-sm ring-1 transition-all",
+                        lowStockCount > 0
+                            ? "ring-warning-200/50 dark:ring-warning-800/50 bg-warning-50/30 dark:bg-warning-900/10"
+                            : "ring-secondary-200/50 dark:ring-secondary-800 bg-transparent"
+                    )}
+                >
                     <div className="flex items-center justify-between">
                         <div>
-                            <p className="text-xs font-bold text-warning-600 dark:text-warning-400 uppercase tracking-wider">Low Stock</p>
-                            <p className="text-2xl font-black text-warning-700 dark:text-warning-300 mt-1">{lowStockCount}</p>
+                            <p className={cn(
+                                "text-[10px] font-bold uppercase tracking-wider",
+                                lowStockCount > 0 ? "text-warning-600 dark:text-warning-400" : "text-secondary-400"
+                            )}>Low Stock</p>
+                            <p className={cn(
+                                "text-xl font-bold mt-0.5",
+                                lowStockCount > 0 ? "text-warning-700 dark:text-warning-300" : "text-secondary-500"
+                            )}>{lowStockCount}</p>
                         </div>
-                        <div className="w-12 h-12 bg-warning-100 dark:bg-warning-900/30 rounded-xl flex items-center justify-center">
-                            <AlertCircle className="w-6 h-6 text-warning-600 dark:text-warning-400" />
+                        <div className={cn(
+                            "w-10 h-10 rounded-xl flex items-center justify-center",
+                            lowStockCount > 0 ? "bg-warning-100 dark:bg-warning-900/30" : "bg-secondary-50 dark:bg-secondary-900/20"
+                        )}>
+                            <AlertCircle className={cn(
+                                "w-5 h-5",
+                                lowStockCount > 0 ? "text-warning-600 dark:text-warning-400" : "text-secondary-400"
+                            )} />
                         </div>
                     </div>
                 </Card>
-                <Card padding="md" className="border-none shadow-sm ring-1 ring-danger-200/50 dark:ring-danger-800/50 bg-danger-50/30 dark:bg-danger-900/10">
+                <Card
+                    padding="sm"
+                    className={cn(
+                        "border-none shadow-sm ring-1 transition-all",
+                        outOfStockCount > 0
+                            ? "ring-danger-200/50 dark:ring-danger-800/50 bg-danger-50/30 dark:bg-danger-900/10"
+                            : "ring-secondary-200/50 dark:ring-secondary-800 bg-transparent"
+                    )}
+                >
                     <div className="flex items-center justify-between">
                         <div>
-                            <p className="text-xs font-bold text-danger-600 dark:text-danger-400 uppercase tracking-wider">Out of Stock</p>
-                            <p className="text-2xl font-black text-danger-700 dark:text-danger-300 mt-1">{outOfStockCount}</p>
+                            <p className={cn(
+                                "text-[10px] font-bold uppercase tracking-wider",
+                                outOfStockCount > 0 ? "text-danger-600 dark:text-danger-400" : "text-secondary-400"
+                            )}>Out of Stock</p>
+                            <p className={cn(
+                                "text-xl font-bold mt-0.5",
+                                outOfStockCount > 0 ? "text-danger-700 dark:text-danger-300" : "text-secondary-500"
+                            )}>{outOfStockCount}</p>
                         </div>
-                        <div className="w-12 h-12 bg-danger-100 dark:bg-danger-900/30 rounded-xl flex items-center justify-center">
-                            <XCircle className="w-6 h-6 text-danger-600 dark:text-danger-400" />
+                        <div className={cn(
+                            "w-10 h-10 rounded-xl flex items-center justify-center",
+                            outOfStockCount > 0 ? "bg-danger-100 dark:bg-danger-900/30" : "bg-secondary-50 dark:bg-secondary-900/20"
+                        )}>
+                            <XCircle className={cn(
+                                "w-5 h-5",
+                                outOfStockCount > 0 ? "text-danger-600 dark:text-danger-400" : "text-secondary-400"
+                            )} />
                         </div>
                     </div>
                 </Card>
@@ -302,301 +344,301 @@ export const Inventory = () => {
                 </Card>
             )}
 
-            {/* Inventory Table Section */}
-            <Card padding="none" className="border-none shadow-xl ring-1 ring-secondary-200/50 dark:ring-secondary-800 overflow-hidden bg-white dark:bg-secondary-900">
-                <div className="p-4 sm:p-6 border-b border-secondary-100 dark:border-secondary-800">
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
-                        <h2 className="text-xl font-black text-secondary-900 dark:text-secondary-50">Stock Levels</h2>
-                        <div className="flex items-center gap-2">
-                            <div className="relative flex-1 sm:flex-initial">
-                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-secondary-400" />
-                                <input
-                                    type="text"
-                                    placeholder="Search inventory..."
-                                    value={searchQuery}
-                                    onChange={e => setSearchQuery(e.target.value)}
-                                    className="pl-10 pr-4 py-2 bg-secondary-50 dark:bg-secondary-800 border-none ring-1 ring-secondary-200 dark:ring-secondary-700 rounded-xl focus:ring-2 focus:ring-primary-500 transition-all outline-none text-sm w-full sm:w-64 text-secondary-900 dark:text-secondary-50 placeholder:text-secondary-400"
-                                />
+            {/* Inventory Controls */}
+            <Card padding="none" className="border-none shadow-xl ring-1 ring-secondary-200/50 dark:ring-secondary-800 bg-white dark:bg-secondary-900 overflow-hidden rounded-[2rem]">
+                <div className="p-4 sm:p-5 border-b border-secondary-100 dark:border-secondary-800">
+                    <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
+                        <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+                            <h2 className="text-lg font-black text-secondary-900 dark:text-secondary-50 font-display whitespace-nowrap">Stock Levels</h2>
+                            <div className="h-5 w-[1px] bg-secondary-200 dark:bg-secondary-800 hidden sm:block" />
+                            {/* Filter Buttons */}
+                            <div className="flex gap-1.5 overflow-x-auto pb-1 no-scrollbar">
+                                {[
+                                    { id: 'all', label: 'All', count: products.length },
+                                    { id: 'in-stock', label: 'In Stock', count: products.length - lowStockCount - outOfStockCount },
+                                    { id: 'low', label: 'Low', count: lowStockCount },
+                                    { id: 'out', label: 'Out', count: outOfStockCount }
+                                ].map(filter => (
+                                    <button
+                                        key={filter.id}
+                                        onClick={() => setFilterType(filter.id as FilterType)}
+                                        className={cn(
+                                            "px-3 py-1.5 rounded-xl font-bold text-[11px] uppercase tracking-wider whitespace-nowrap transition-all",
+                                            filterType === filter.id
+                                                ? "bg-primary-600 text-white shadow-lg shadow-primary-600/20"
+                                                : "bg-secondary-50 dark:bg-secondary-800 text-secondary-500 dark:text-secondary-400 hover:bg-secondary-100 dark:hover:bg-secondary-700"
+                                        )}
+                                    >
+                                        {filter.label} ({filter.count})
+                                    </button>
+                                ))}
                             </div>
                         </div>
-                    </div>
 
-                    {/* Filter Buttons */}
-                    <div className="flex gap-2 overflow-x-auto pb-1">
-                        {[
-                            { id: 'all', label: 'All Items', count: products.length },
-                            { id: 'in-stock', label: 'In Stock', count: products.length - lowStockCount - outOfStockCount },
-                            { id: 'low', label: 'Low Stock', count: lowStockCount },
-                            { id: 'out', label: 'Out of Stock', count: outOfStockCount }
-                        ].map(filter => (
-                            <button
-                                key={filter.id}
-                                onClick={() => setFilterType(filter.id as FilterType)}
-                                className={cn(
-                                    "px-4 py-2 rounded-xl font-bold text-sm whitespace-nowrap transition-all",
-                                    filterType === filter.id
-                                        ? "bg-primary-600 text-white shadow-lg shadow-primary-600/20"
-                                        : "bg-secondary-50 dark:bg-secondary-800 text-secondary-600 dark:text-secondary-400 hover:bg-secondary-100 dark:hover:bg-secondary-700"
-                                )}
-                            >
-                                {filter.label} ({filter.count})
-                            </button>
-                        ))}
+                        <div className="relative w-full lg:w-80 group">
+                            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-secondary-400 group-focus-within:text-primary-500 transition-colors" />
+                            <input
+                                type="text"
+                                placeholder="Search inventory..."
+                                value={searchQuery}
+                                onChange={e => setSearchQuery(e.target.value)}
+                                className="w-full pl-11 pr-4 py-2.5 bg-secondary-50/50 dark:bg-secondary-800/50 border-none ring-1 ring-secondary-200/50 dark:ring-secondary-800 rounded-2xl focus:ring-2 focus:ring-primary-500/50 transition-all outline-none text-sm font-medium text-secondary-900 dark:text-secondary-50 placeholder:text-secondary-400"
+                            />
+                        </div>
                     </div>
                 </div>
 
-                {/* Desktop Table View */}
-                <div className="hidden md:block overflow-x-auto">
-                    <table className="w-full text-left border-collapse">
-                        <thead>
-                            <tr className="bg-secondary-50/50 dark:bg-secondary-800/50">
-                                <th className="px-4 py-3 text-[10px] font-black text-secondary-400 uppercase tracking-widest min-w-[150px]">
-                                    <button onClick={() => handleSort('name')} className="flex items-center gap-2 hover:text-secondary-600">
-                                        <Package className="w-3.5 h-3.5" />
-                                        Product
-                                        {sortField === 'name' && (sortDirection === 'asc' ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />)}
-                                    </button>
-                                </th>
-                                <th className="px-4 py-3 text-[10px] font-black text-secondary-400 uppercase tracking-widest min-w-[100px]">
-                                    <button onClick={() => handleSort('category')} className="flex items-center gap-2 hover:text-secondary-600">
-                                        Category
-                                        {sortField === 'category' && (sortDirection === 'asc' ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />)}
-                                    </button>
-                                </th>
-                                <th className="px-4 py-3 text-[10px] font-black text-secondary-400 uppercase tracking-widest min-w-[120px]">
-                                    <button onClick={() => handleSort('stock')} className="flex items-center gap-2 hover:text-secondary-600">
-                                        Stock Level
-                                        {sortField === 'stock' && (sortDirection === 'asc' ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />)}
-                                    </button>
-                                </th>
-                                <th className="px-4 py-3 text-[10px] font-black text-secondary-400 uppercase tracking-widest min-w-[100px]">Status</th>
-                                <th className="px-4 py-3 text-[10px] font-black text-secondary-400 uppercase tracking-widest min-w-[100px]">Quick Adjust</th>
-                                <th className="px-4 py-3 text-[10px] font-black text-secondary-400 uppercase tracking-widest text-right">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-secondary-50 dark:divide-secondary-800">
-                            {isLoading ? (
-                                [...Array(5)].map((_, i) => (
-                                    <tr key={i}>
-                                        <td colSpan={6} className="px-6 py-4">
-                                            <div className="h-12 bg-secondary-50 dark:bg-secondary-800 animate-pulse rounded-xl" />
+                <div className="p-0">
+                    {/* Desktop Table View - Triggered at 'sm' (640px) */}
+                    <div className="hidden sm:block overflow-x-auto">
+                        <table className="w-full text-left border-collapse">
+                            <thead>
+                                <tr className="bg-secondary-50/30 dark:bg-secondary-800/30">
+                                    <th className="px-6 py-4 text-[10px] font-bold text-secondary-400 uppercase tracking-widest min-w-[150px]">
+                                        <button onClick={() => handleSort('name')} className="flex items-center gap-2 hover:text-secondary-600 transition-colors">
+                                            <Package className="w-3.5 h-3.5" />
+                                            Product
+                                            {sortField === 'name' && (sortDirection === 'asc' ? <ChevronUp className="w-3 h-3 text-primary-500" /> : <ChevronDown className="w-3 h-3 text-primary-500" />)}
+                                        </button>
+                                    </th>
+                                    <th className="px-6 py-4 text-[10px] font-bold text-secondary-400 uppercase tracking-widest min-w-[100px]">
+                                        <button onClick={() => handleSort('category')} className="flex items-center gap-2 hover:text-secondary-600 transition-colors">
+                                            Category
+                                            {sortField === 'category' && (sortDirection === 'asc' ? <ChevronUp className="w-3 h-3 text-primary-500" /> : <ChevronDown className="w-3 h-3 text-primary-500" />)}
+                                        </button>
+                                    </th>
+                                    <th className="px-6 py-4 text-[10px] font-bold text-secondary-400 uppercase tracking-widest min-w-[120px]">
+                                        <button onClick={() => handleSort('stock')} className="flex items-center gap-2 hover:text-secondary-600 transition-colors">
+                                            Stock Level
+                                            {sortField === 'stock' && (sortDirection === 'asc' ? <ChevronUp className="w-3 h-3 text-primary-500" /> : <ChevronDown className="w-3 h-3 text-primary-500" />)}
+                                        </button>
+                                    </th>
+                                    <th className="px-6 py-4 text-[10px] font-bold text-secondary-400 uppercase tracking-widest min-w-[100px]">Status</th>
+                                    <th className="px-6 py-4 text-[10px] font-bold text-secondary-400 uppercase tracking-widest min-w-[100px]">Quick Adjust</th>
+                                    <th className="px-6 py-4 text-[10px] font-bold text-secondary-400 uppercase tracking-widest text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-secondary-50 dark:divide-secondary-800">
+                                {isLoading ? (
+                                    [...Array(5)].map((_, i) => (
+                                        <tr key={i}>
+                                            <td colSpan={6} className="px-6 py-4">
+                                                <div className="h-12 bg-secondary-50 dark:bg-secondary-800 animate-pulse rounded-xl" />
+                                            </td>
+                                        </tr>
+                                    ))
+                                ) : filteredAndSortedProducts.length === 0 ? (
+                                    <tr>
+                                        <td colSpan={6} className="px-6 py-20 text-center">
+                                            <div className="w-16 h-16 bg-secondary-50 dark:bg-secondary-800 rounded-full flex items-center justify-center mx-auto mb-4">
+                                                <ClipboardList className="w-8 h-8 text-secondary-200 dark:text-secondary-700" />
+                                            </div>
+                                            <p className="text-secondary-400 dark:text-secondary-500 font-bold">No items found.</p>
                                         </td>
                                     </tr>
-                                ))
-                            ) : filteredAndSortedProducts.length === 0 ? (
-                                <tr>
-                                    <td colSpan={6} className="px-6 py-20 text-center">
-                                        <div className="w-16 h-16 bg-secondary-50 dark:bg-secondary-800 rounded-full flex items-center justify-center mx-auto mb-4">
-                                            <ClipboardList className="w-8 h-8 text-secondary-200 dark:text-secondary-700" />
-                                        </div>
-                                        <p className="text-secondary-400 dark:text-secondary-500 font-bold">No items found.</p>
-                                    </td>
-                                </tr>
-                            ) : (
-                                filteredAndSortedProducts.map((product) => {
-                                    const status = getStockStatus(product.stock);
-                                    const stockPercentage = Math.min((product.stock / 20) * 100, 100);
+                                ) : (
+                                    filteredAndSortedProducts.map((product) => {
+                                        const status = getStockStatus(product.stock);
+                                        const stockPercentage = Math.min((product.stock / 20) * 100, 100);
 
-                                    return (
-                                        <tr key={product.id} className="hover:bg-secondary-50/50 dark:hover:bg-secondary-800/50 transition-colors group">
-                                            <td className="px-4 py-3">
-                                                <div className="flex flex-col">
-                                                    <span className="font-black text-secondary-900 dark:text-secondary-50 text-sm truncate max-w-[200px]" title={product.name}>{product.name}</span>
-                                                    <span className="font-bold text-secondary-500 dark:text-secondary-400 text-[9px] uppercase tracking-wider">{product.sku}</span>
-                                                </div>
-                                            </td>
-                                            <td className="px-4 py-3">
-                                                <span className="px-2 py-0.5 bg-secondary-100 dark:bg-secondary-800 text-secondary-700 dark:text-secondary-300 text-[9px] font-black rounded-lg uppercase tracking-wider">
-                                                    {product.category}
-                                                </span>
-                                            </td>
-                                            <td className="px-4 py-3">
-                                                <div className="space-y-1.5">
-                                                    <div className="flex items-center gap-2">
-                                                        <span className={cn(
-                                                            "font-black text-sm",
-                                                            status === 'out' ? "text-danger-600" :
-                                                                status === 'low' ? "text-warning-600" : "text-success-600"
-                                                        )}>
-                                                            {formatStock(product.stock, product.unit || 'Pack')}
-                                                        </span>
-                                                        <span className="text-[10px] text-secondary-400 font-bold">
-                                                            ({product.stock.toFixed(2)})
-                                                        </span>
+                                        return (
+                                            <tr key={product.id} className="hover:bg-secondary-50/30 dark:hover:bg-secondary-800/30 transition-colors group">
+                                                <td className="px-6 py-4">
+                                                    <div className="flex flex-col">
+                                                        <span className="font-bold text-secondary-900 dark:text-secondary-50 text-sm truncate max-w-[200px]" title={product.name}>{product.name}</span>
+                                                        <span className="font-bold text-secondary-400 text-[9px] uppercase tracking-widest mt-0.5">{product.sku}</span>
                                                     </div>
-                                                    <div className="w-full h-1 bg-secondary-100 dark:bg-secondary-800 rounded-full overflow-hidden">
-                                                        <div
-                                                            className={cn(
-                                                                "h-full transition-all",
-                                                                status === 'out' ? "bg-danger-500" :
-                                                                    status === 'low' ? "bg-warning-500" : "bg-success-500"
-                                                            )}
-                                                            style={{ width: `${stockPercentage}%` }}
-                                                        />
+                                                </td>
+                                                <td className="px-6 py-4">
+                                                    <span className="px-2 py-0.5 bg-secondary-100 dark:bg-secondary-800 text-secondary-600 dark:text-secondary-400 text-[9px] font-bold rounded-lg uppercase tracking-wider">
+                                                        {product.category}
+                                                    </span>
+                                                </td>
+                                                <td className="px-6 py-4">
+                                                    <div className="space-y-2">
+                                                        <div className="flex items-center gap-2">
+                                                            <span className={cn(
+                                                                "font-bold text-sm",
+                                                                status === 'out' ? "text-danger-600" :
+                                                                    status === 'low' ? "text-warning-600" : "text-success-600"
+                                                            )}>
+                                                                {formatStock(product.stock, product.unit || 'Pack')}
+                                                            </span>
+                                                            <span className="text-[10px] text-secondary-400 font-medium">
+                                                                ({product.stock.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })})
+                                                            </span>
+                                                        </div>
+                                                        <div className="w-24 h-1 bg-secondary-100 dark:bg-secondary-800 rounded-full overflow-hidden">
+                                                            <div
+                                                                className={cn(
+                                                                    "h-full transition-all duration-500",
+                                                                    status === 'out' ? "bg-danger-500" :
+                                                                        status === 'low' ? "bg-warning-500" : "bg-success-500"
+                                                                )}
+                                                                style={{ width: `${stockPercentage}%` }}
+                                                            />
+                                                        </div>
                                                     </div>
+                                                </td>
+                                                <td className="px-6 py-4">
+                                                    {status === 'out' ? (
+                                                        <div className="flex items-center gap-1.5 text-danger-600 dark:text-danger-400 font-bold text-[10px] uppercase tracking-wider">
+                                                            <XCircle className="w-3.5 h-3.5" />
+                                                            Out
+                                                        </div>
+                                                    ) : status === 'low' ? (
+                                                        <div className="flex items-center gap-1.5 text-warning-600 dark:text-warning-400 font-bold text-[10px] uppercase tracking-wider">
+                                                            <AlertCircle className="w-3.5 h-3.5" />
+                                                            Low
+                                                        </div>
+                                                    ) : (
+                                                        <div className="flex items-center gap-1.5 text-success-600 dark:text-success-400 font-bold text-[10px] uppercase tracking-wider">
+                                                            <CheckCircle2 className="w-3.5 h-3.5" />
+                                                            In Stock
+                                                        </div>
+                                                    )}
+                                                </td>
+                                                <td className="px-6 py-4">
+                                                    <div className="flex items-center gap-1">
+                                                        <button
+                                                            onClick={() => handleQuickAdjust(product, -1)}
+                                                            className="w-8 h-8 bg-secondary-100 dark:bg-secondary-800 hover:bg-danger-50 dark:hover:bg-danger-900/20 hover:text-danger-600 rounded-lg flex items-center justify-center transition-all"
+                                                        >
+                                                            <Minus className="w-4 h-4" />
+                                                        </button>
+                                                        <button
+                                                            onClick={() => handleQuickAdjust(product, 1)}
+                                                            className="w-8 h-8 bg-secondary-100 dark:bg-secondary-800 hover:bg-success-50 dark:hover:bg-success-900/20 hover:text-success-600 rounded-lg flex items-center justify-center transition-all"
+                                                        >
+                                                            <Plus className="w-4 h-4" />
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                                <td className="px-6 py-4 text-right">
+                                                    <button
+                                                        onClick={() => {
+                                                            setSelectedProduct(product);
+                                                            setIsAdjustOpen(true);
+                                                        }}
+                                                        className="p-2 hover:bg-white dark:hover:bg-secondary-800 hover:shadow-md hover:ring-1 hover:ring-secondary-200 dark:hover:ring-secondary-700 rounded-xl transition-all text-secondary-400 hover:text-primary-600"
+                                                    >
+                                                        <ArrowUpDown className="w-5 h-5" />
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        );
+                                    })
+                                )}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    {/* Mobile Card View */}
+                    <div className="sm:hidden divide-y divide-secondary-100 dark:divide-secondary-800">
+                        {isLoading ? (
+                            [...Array(3)].map((_, i) => (
+                                <div key={i} className="p-4">
+                                    <div className="h-24 bg-secondary-50 dark:bg-secondary-800 animate-pulse rounded-xl" />
+                                </div>
+                            ))
+                        ) : filteredAndSortedProducts.length === 0 ? (
+                            <div className="p-12 text-center">
+                                <div className="w-16 h-16 bg-secondary-50 dark:bg-secondary-800 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <ClipboardList className="w-8 h-8 text-secondary-200 dark:text-secondary-700" />
+                                </div>
+                                <p className="text-secondary-400 dark:text-secondary-500 font-bold">No items found.</p>
+                            </div>
+                        ) : (
+                            filteredAndSortedProducts.map((product) => {
+                                const status = getStockStatus(product.stock);
+                                const stockPercentage = Math.min((product.stock / 20) * 100, 100);
+
+                                return (
+                                    <div key={product.id} className="p-5 hover:bg-secondary-50/50 dark:hover:bg-secondary-800/50 transition-colors">
+                                        <div className="flex items-start justify-between gap-4 mb-4">
+                                            <div className="flex-1 min-w-0">
+                                                <div className="flex items-center gap-2 mb-1">
+                                                    <h3 className="font-bold text-secondary-900 dark:text-secondary-50 truncate text-base">{product.name}</h3>
+                                                    <span className="px-2 py-0.5 bg-secondary-100 dark:bg-secondary-800 text-secondary-500 dark:text-secondary-400 text-[9px] font-bold rounded-md uppercase tracking-wider flex-shrink-0">
+                                                        {product.category}
+                                                    </span>
                                                 </div>
-                                            </td>
-                                            <td className="px-4 py-3">
+                                                <p className="text-[10px] text-secondary-400 font-bold uppercase tracking-widest">{product.sku}</p>
+                                            </div>
+                                            <div className="flex flex-col items-end gap-1">
                                                 {status === 'out' ? (
-                                                    <div className="flex items-center gap-1.5 text-danger-600 dark:text-danger-400 font-bold text-[10px] uppercase tracking-wider">
-                                                        <XCircle className="w-3.5 h-3.5" />
-                                                        Out of Stock
-                                                    </div>
+                                                    <span className="text-danger-600 dark:text-danger-400 font-bold text-[10px] uppercase tracking-wider flex items-center gap-1">
+                                                        <XCircle className="w-3 h-3" /> Out
+                                                    </span>
                                                 ) : status === 'low' ? (
-                                                    <div className="flex items-center gap-1.5 text-warning-600 dark:text-warning-400 font-bold text-[10px] uppercase tracking-wider">
-                                                        <AlertCircle className="w-3.5 h-3.5" />
-                                                        Low Stock
-                                                    </div>
+                                                    <span className="text-warning-600 dark:text-warning-400 font-bold text-[10px] uppercase tracking-wider flex items-center gap-1">
+                                                        <AlertCircle className="w-3 h-3" /> Low
+                                                    </span>
                                                 ) : (
-                                                    <div className="flex items-center gap-1.5 text-success-600 dark:text-success-400 font-bold text-xs uppercase tracking-wider">
-                                                        <CheckCircle2 className="w-4 h-4" />
-                                                        In Stock
-                                                    </div>
+                                                    <span className="text-success-600 dark:text-success-400 font-bold text-[10px] uppercase tracking-wider flex items-center gap-1">
+                                                        <CheckCircle2 className="w-3 h-3" /> In Stock
+                                                    </span>
                                                 )}
-                                            </td>
-                                            <td className="px-6 py-4">
-                                                <div className="flex items-center gap-1">
+                                            </div>
+                                        </div>
+
+                                        <div className="space-y-4 mb-5">
+                                            <div>
+                                                <div className="flex items-center justify-between mb-2">
+                                                    <p className="text-[10px] font-bold text-secondary-400 uppercase tracking-widest">Stock Level</p>
+                                                    <p className={cn(
+                                                        "font-bold text-sm",
+                                                        status === 'out' ? "text-danger-600" :
+                                                            status === 'low' ? "text-warning-600" : "text-success-600"
+                                                    )}>
+                                                        {formatStock(product.stock, product.unit || 'Pack')}
+                                                    </p>
+                                                </div>
+                                                <div className="w-full h-1 bg-secondary-100 dark:bg-secondary-800 rounded-full overflow-hidden">
+                                                    <div
+                                                        className={cn(
+                                                            "h-full transition-all",
+                                                            status === 'out' ? "bg-danger-500" :
+                                                                status === 'low' ? "bg-warning-500" : "bg-success-500"
+                                                        )}
+                                                        style={{ width: `${stockPercentage}%` }}
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            <div className="flex items-center gap-3">
+                                                <div className="flex-1 grid grid-cols-2 gap-2">
                                                     <button
                                                         onClick={() => handleQuickAdjust(product, -1)}
-                                                        className="w-8 h-8 bg-secondary-100 dark:bg-secondary-800 hover:bg-danger-50 dark:hover:bg-danger-900/20 hover:text-danger-600 rounded-lg flex items-center justify-center transition-all"
+                                                        className="h-10 bg-secondary-100 dark:bg-secondary-800 hover:bg-danger-50 dark:hover:bg-danger-900/20 hover:text-danger-600 rounded-xl flex items-center justify-center transition-all border border-transparent active:scale-95"
                                                     >
                                                         <Minus className="w-4 h-4" />
                                                     </button>
                                                     <button
                                                         onClick={() => handleQuickAdjust(product, 1)}
-                                                        className="w-8 h-8 bg-secondary-100 dark:bg-secondary-800 hover:bg-success-50 dark:hover:bg-success-900/20 hover:text-success-600 rounded-lg flex items-center justify-center transition-all"
+                                                        className="h-10 bg-secondary-100 dark:bg-secondary-800 hover:bg-success-50 dark:hover:bg-success-900/20 hover:text-success-600 rounded-xl flex items-center justify-center transition-all border border-transparent active:scale-95"
                                                     >
                                                         <Plus className="w-4 h-4" />
                                                     </button>
                                                 </div>
-                                            </td>
-                                            <td className="px-6 py-4 text-right">
-                                                <button
+                                                <Button
+                                                    variant="secondary"
+                                                    className="flex-1 h-10 shadow-none border-none ring-1 ring-secondary-200 dark:ring-secondary-700 active:scale-95 text-xs"
                                                     onClick={() => {
                                                         setSelectedProduct(product);
                                                         setIsAdjustOpen(true);
                                                     }}
-                                                    className="p-2 hover:bg-white dark:hover:bg-secondary-800 hover:shadow-md hover:ring-1 hover:ring-secondary-200 dark:hover:ring-secondary-700 rounded-xl transition-all text-secondary-400 hover:text-primary-600"
                                                 >
-                                                    <ArrowUpDown className="w-5 h-5" />
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    );
-                                })
-                            )}
-                        </tbody>
-                    </table>
-                </div>
-
-                {/* Mobile Card View */}
-                <div className="md:hidden divide-y divide-secondary-100 dark:divide-secondary-800">
-                    {isLoading ? (
-                        [...Array(3)].map((_, i) => (
-                            <div key={i} className="p-4">
-                                <div className="h-24 bg-secondary-50 dark:bg-secondary-800 animate-pulse rounded-xl" />
-                            </div>
-                        ))
-                    ) : filteredAndSortedProducts.length === 0 ? (
-                        <div className="p-12 text-center">
-                            <div className="w-16 h-16 bg-secondary-50 dark:bg-secondary-800 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <ClipboardList className="w-8 h-8 text-secondary-200 dark:text-secondary-700" />
-                            </div>
-                            <p className="text-secondary-400 dark:text-secondary-500 font-bold">No items found.</p>
-                        </div>
-                    ) : (
-                        filteredAndSortedProducts.map((product) => {
-                            const status = getStockStatus(product.stock);
-                            const stockPercentage = Math.min((product.stock / 20) * 100, 100);
-
-                            return (
-                                <div key={product.id} className="p-4 hover:bg-secondary-50/50 dark:hover:bg-secondary-800/50 transition-colors">
-                                    <div className="flex items-start justify-between gap-4 mb-3">
-                                        <div className="flex-1 min-w-0">
-                                            <h3 className="font-bold text-secondary-900 dark:text-secondary-50 truncate">{product.name}</h3>
-                                            <p className="text-[10px] text-secondary-400 font-bold uppercase tracking-wider mt-0.5">{product.sku}</p>
-                                        </div>
-                                        <span className="px-2.5 py-1 bg-secondary-100 dark:bg-secondary-800 text-secondary-700 dark:text-secondary-300 text-[10px] font-bold rounded-lg uppercase tracking-wider flex-shrink-0">
-                                            {product.category}
-                                        </span>
-                                    </div>
-
-                                    <div className="space-y-3 mb-3">
-                                        <div>
-                                            <div className="flex items-center justify-between mb-2">
-                                                <p className="text-[10px] font-bold text-secondary-400 uppercase tracking-wider">Stock Level</p>
-                                                <span className={cn(
-                                                    "font-black text-base",
-                                                    status === 'out' ? "text-danger-600" :
-                                                        status === 'low' ? "text-warning-600" : "text-success-600"
-                                                )}>
-                                                    {formatStock(product.stock, product.unit || 'Pack')}
-                                                </span>
-                                            </div>
-                                            <div className="w-full h-2 bg-secondary-100 dark:bg-secondary-800 rounded-full overflow-hidden">
-                                                <div
-                                                    className={cn(
-                                                        "h-full transition-all",
-                                                        status === 'out' ? "bg-danger-500" :
-                                                            status === 'low' ? "bg-warning-500" : "bg-success-500"
-                                                    )}
-                                                    style={{ width: `${stockPercentage}%` }}
-                                                />
-                                            </div>
-                                        </div>
-
-                                        <div className="flex items-center justify-between">
-                                            <div>
-                                                {status === 'out' ? (
-                                                    <div className="flex items-center gap-1.5 text-danger-600 dark:text-danger-400 font-bold text-xs uppercase tracking-wider">
-                                                        <XCircle className="w-4 h-4" />
-                                                        Out of Stock
-                                                    </div>
-                                                ) : status === 'low' ? (
-                                                    <div className="flex items-center gap-1.5 text-warning-600 dark:text-warning-400 font-bold text-xs uppercase tracking-wider">
-                                                        <AlertCircle className="w-4 h-4" />
-                                                        Low Stock
-                                                    </div>
-                                                ) : (
-                                                    <div className="flex items-center gap-1.5 text-success-600 dark:text-success-400 font-bold text-xs uppercase tracking-wider">
-                                                        <CheckCircle2 className="w-4 h-4" />
-                                                        In Stock
-                                                    </div>
-                                                )}
-                                            </div>
-                                            <div className="flex items-center gap-2">
-                                                <button
-                                                    onClick={() => handleQuickAdjust(product, -1)}
-                                                    className="w-10 h-10 bg-secondary-100 dark:bg-secondary-800 hover:bg-danger-50 dark:hover:bg-danger-900/20 hover:text-danger-600 rounded-xl flex items-center justify-center transition-all"
-                                                >
-                                                    <Minus className="w-5 h-5" />
-                                                </button>
-                                                <button
-                                                    onClick={() => handleQuickAdjust(product, 1)}
-                                                    className="w-10 h-10 bg-secondary-100 dark:bg-secondary-800 hover:bg-success-50 dark:hover:bg-success-900/20 hover:text-success-600 rounded-xl flex items-center justify-center transition-all"
-                                                >
-                                                    <Plus className="w-5 h-5" />
-                                                </button>
+                                                    <ArrowUpDown className="w-3.5 h-3.5 mr-2" />
+                                                    Adjust
+                                                </Button>
                                             </div>
                                         </div>
                                     </div>
-
-                                    <Button
-                                        variant="ghost"
-                                        size="sm"
-                                        className="w-full"
-                                        onClick={() => {
-                                            setSelectedProduct(product);
-                                            setIsAdjustOpen(true);
-                                        }}
-                                    >
-                                        <ArrowUpDown className="w-4 h-4 mr-2" />
-                                        Adjust Stock
-                                    </Button>
-                                </div>
-                            );
-                        })
-                    )}
+                                );
+                            })
+                        )}
+                    </div>
                 </div>
             </Card>
 
@@ -634,7 +676,7 @@ export const Inventory = () => {
                                             <p className="font-black text-secondary-900 dark:text-secondary-50 truncate">{p.name}</p>
                                             <p className="text-xs font-bold text-secondary-400 uppercase">{p.sku}</p>
                                         </div>
-                                        <span className="font-black text-secondary-600 dark:text-secondary-400 whitespace-nowrap">{p.stock}</span>
+                                        <span className="font-black text-secondary-600 dark:text-secondary-400 whitespace-nowrap">{p.stock.toLocaleString()}</span>
                                     </button>
                                 ))}
                             </div>
@@ -644,7 +686,7 @@ export const Inventory = () => {
                             <div className="p-4 bg-primary-50 dark:bg-primary-900/20 rounded-2xl border-2 border-primary-100 dark:border-primary-900/50 flex items-center justify-between">
                                 <div>
                                     <p className="font-black text-primary-900 dark:text-primary-100">{selectedProduct.name}</p>
-                                    <p className="text-xs font-bold text-primary-600 dark:text-primary-400 uppercase">Current Stock: {selectedProduct.stock}</p>
+                                    <p className="text-xs font-bold text-primary-600 dark:text-primary-400 uppercase">Current Stock: {selectedProduct.stock.toLocaleString()}</p>
                                 </div>
                                 <button
                                     onClick={() => setSelectedProduct(null)}
@@ -725,6 +767,3 @@ export const Inventory = () => {
         </div>
     );
 };
-
-
-

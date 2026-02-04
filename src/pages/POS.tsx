@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
+import { API_URL } from '../config';
 import { Card } from '../components/ui/Card';
 import { Skeleton } from '../components/ui/Skeleton';
 import { Button } from '../components/ui/Button';
@@ -43,7 +44,7 @@ export const POS = () => {
     useEffect(() => {
         const fetchSettings = async () => {
             try {
-                const res = await fetch(`/api/settings`);
+                const res = await fetch(`${API_URL}/settings`);
                 if (res.ok) {
                     const data = await res.json();
                     setSettings(data);
@@ -219,7 +220,7 @@ export const POS = () => {
             {/* Product Selection Area */}
             <div className="flex-1 flex flex-col min-w-0 gap-6 overflow-hidden">
                 {/* Search and Categories */}
-                <Card padding="sm" className="border-none shadow-sm ring-1 ring-secondary-200/50 flex-shrink-0 mx-1">
+                <Card padding="sm" className="border-none shadow-sm ring-1 ring-secondary-200/50 flex-shrink-0 mx-1 mt-4">
                     <div className="flex flex-col lg:flex-row gap-3">
                         <div className="relative flex-1">
                             <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-secondary-400" />
@@ -252,7 +253,7 @@ export const POS = () => {
 
                 {/* Product Grid - Scrollable */}
                 <div className="flex-1 overflow-y-auto px-1 pr-2 pt-4 pb-32 md:pb-6">
-                    <div className="grid grid-cols-2 sm:grid-cols-[repeat(auto-fill,minmax(180px,1fr))] gap-3 sm:gap-4 lg:gap-8">
+                    <div className="grid grid-cols-2 sm:grid-cols-[repeat(auto-fill,minmax(180px,1fr))] gap-2 sm:gap-4 lg:gap-8">
                         {isLoading ? (
                             [...Array(12)].map((_, i) => (
                                 <Card key={i} padding="md" className="border-none shadow-sm ring-1 ring-secondary-200/50 space-y-4">

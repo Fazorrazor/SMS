@@ -84,60 +84,63 @@ export const Users = () => {
     }
 
     return (
-        <div className="max-w-7xl mx-auto space-y-6 animate-in fade-in duration-500 pb-12">
+        <div className="w-full space-y-8 animate-in fade-in duration-500 pb-12">
             {/* Header */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
                 <div>
-                    <h1 className="text-3xl font-black text-secondary-900 dark:text-secondary-50 tracking-tight">Staff Management</h1>
-                    <p className="text-secondary-500 dark:text-secondary-400 font-medium mt-1">Manage system users and their access levels.</p>
+                    <h1 className="text-3xl font-black text-secondary-900 dark:text-secondary-50 tracking-tight font-display">Staff Management</h1>
+                    <p className="text-base font-medium text-secondary-500 dark:text-secondary-400 mt-1">Manage system users and their access levels.</p>
                 </div>
-                <button
+                <Button
                     onClick={() => {
                         setFormData({ name: '', username: '', role: 'Cashier', password: '' });
                         setIsAddOpen(true);
                     }}
-                    className="flex items-center gap-2 px-6 py-3 bg-primary-600 rounded-2xl font-black text-white shadow-xl shadow-primary-600/20 hover:bg-primary-700 transition-all active:scale-95"
+                    size="lg"
+                    className="w-full sm:w-auto shadow-xl shadow-primary-600/20 active:scale-95"
                 >
-                    <UserPlus className="w-5 h-5" />
+                    <UserPlus className="w-5 h-5 mr-2" />
                     Add New Staff
-                </button>
+                </Button>
             </div>
 
             {/* Users Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
                 {users.map((u) => (
-                    <Card key={u.id} padding="lg" className="border-none shadow-sm ring-1 ring-secondary-200/50 dark:ring-secondary-800 hover:ring-primary-500/50 transition-all group relative overflow-hidden bg-white dark:bg-secondary-900">
-                        {/* Role Badge Background */}
+                    <Card key={u.id} padding="lg" className="border-none shadow-sm ring-1 ring-secondary-200/50 dark:ring-secondary-800 hover:ring-primary-500/50 transition-all group relative overflow-hidden bg-white dark:bg-secondary-900 flex flex-col h-full">
+                        {/* Role Badge Background Decoration */}
                         <div className={cn(
-                            "absolute -top-6 -right-6 w-24 h-24 rounded-full opacity-5 group-hover:opacity-10 transition-opacity",
+                            "absolute -top-10 -right-10 w-32 h-32 rounded-full opacity-[0.03] group-hover:opacity-[0.08] transition-opacity duration-500",
                             u.role === 'Admin' ? "bg-primary-600" : "bg-success-600"
                         )} />
 
-                        <div className="flex items-start justify-between relative">
+                        <div className="flex items-start justify-between relative mb-6">
                             <div className="flex items-center gap-4">
                                 <div className={cn(
-                                    "w-14 h-14 rounded-2xl flex items-center justify-center text-white shadow-lg",
+                                    "w-14 h-14 rounded-2xl flex items-center justify-center text-white shadow-lg transition-transform duration-500 group-hover:scale-110",
                                     u.role === 'Admin' ? "bg-primary-600 shadow-primary-600/20" : "bg-success-600 shadow-success-600/20"
                                 )}>
                                     <UserIcon className="w-7 h-7" />
                                 </div>
                                 <div className="min-w-0 flex-1">
-                                    <h3 className="font-black text-secondary-900 dark:text-secondary-50 text-lg truncate">{u.name}</h3>
+                                    <h3 className="font-black text-secondary-900 dark:text-secondary-50 text-lg truncate font-display">{u.name}</h3>
                                     <div className="flex items-center gap-1.5 text-secondary-400 dark:text-secondary-500 font-bold text-xs uppercase tracking-wider mt-0.5">
                                         <Mail className="w-3 h-3 flex-shrink-0" />
                                         <span className="truncate">@{u.username}</span>
                                     </div>
                                 </div>
                             </div>
-                            <button
+                            <Button
+                                variant="ghost"
+                                size="sm"
                                 onClick={() => handleEditClick(u)}
-                                className="p-2 text-secondary-300 hover:text-primary-600 transition-colors"
+                                className="w-8 h-8 p-0 rounded-lg text-secondary-400 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-all"
                             >
-                                <Pencil className="w-5 h-5" />
-                            </button>
+                                <Pencil className="w-4 h-4" />
+                            </Button>
                         </div>
 
-                        <div className="mt-8 flex items-center justify-between">
+                        <div className="mt-auto pt-6 border-t border-secondary-100 dark:border-secondary-800 flex items-center justify-between">
                             <div className={cn(
                                 "flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-black text-[10px] uppercase tracking-widest",
                                 u.role === 'Admin' ? "bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-400" : "bg-success-50 dark:bg-success-900/20 text-success-700 dark:text-success-400"
@@ -145,13 +148,15 @@ export const Users = () => {
                                 {u.role === 'Admin' ? <ShieldCheck className="w-3.5 h-3.5" /> : <Shield className="w-3.5 h-3.5" />}
                                 {u.role}
                             </div>
-                            <button
+                            <Button
+                                variant="ghost"
+                                size="sm"
                                 onClick={() => deleteUser(u.id)}
-                                className="flex items-center gap-2 text-secondary-400 hover:text-danger-600 font-bold text-xs transition-colors"
+                                className="text-secondary-400 hover:text-danger-600 hover:bg-danger-50 dark:hover:bg-danger-900/20 font-bold text-xs px-2 py-1 h-auto"
                             >
-                                <Trash2 className="w-4 h-4" />
+                                <Trash2 className="w-3.5 h-3.5 mr-1.5" />
                                 Remove
-                            </button>
+                            </Button>
                         </div>
                     </Card>
                 ))}

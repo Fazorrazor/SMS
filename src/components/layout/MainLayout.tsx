@@ -39,7 +39,7 @@ export const MainLayout = () => {
                     <div className="flex items-center gap-4">
                         <button
                             type="button"
-                            className="p-2 -ml-2 text-secondary-500 dark:text-secondary-400 hover:bg-secondary-100 dark:hover:bg-secondary-800 rounded-xl transition-all active:scale-90 focus:outline-none relative"
+                            className="p-2 -ml-2 text-secondary-500 dark:text-secondary-400 hover:bg-secondary-100 dark:hover:bg-secondary-800 rounded-lg transition-colors focus:outline-none"
                             onClick={() => setSidebarOpen(true)}
                         >
                             <span className="sr-only">Open sidebar</span>
@@ -56,8 +56,8 @@ export const MainLayout = () => {
                     </div>
 
                     {/* Optional: Add a quick action or profile toggle here for mobile */}
-                    <div className="w-8 h-8 rounded-full bg-primary-50 dark:bg-primary-900/20 flex items-center justify-center text-primary-600 dark:text-primary-400 text-xs font-black">
-                        {/* You could put the user's initial here too */}
+                    <div className="w-8 h-8 rounded-full bg-primary-50 dark:bg-primary-900/20 flex items-center justify-center text-primary-600 dark:text-primary-400 text-xs font-bold">
+                        {/* User initial */}
                     </div>
                 </div>
 
@@ -65,10 +65,10 @@ export const MainLayout = () => {
                     {!isOnline && (
                         <div className="bg-danger-600 text-white px-4 py-2 flex items-center justify-center gap-2 animate-in slide-in-from-top duration-300">
                             <WifiOff className="w-4 h-4" />
-                            <span className="text-xs font-black uppercase tracking-widest">Offline Mode - Connection to server lost</span>
+                            <span className="text-xs font-bold uppercase tracking-widest">Offline Mode - Connection lost</span>
                         </div>
                     )}
-                    <div className="absolute inset-0 flex flex-col p-4 md:p-8 overflow-y-auto">
+                    <div className="absolute inset-0 flex flex-col p-4 md:p-8 xl:p-12 overflow-y-auto">
                         <Outlet />
                     </div>
                 </main>

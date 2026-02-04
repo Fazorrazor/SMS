@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
 import { toast } from 'sonner';
 import { io } from 'socket.io-client';
+import { API_URL, SOCKET_URL } from '../config';
 
 export interface Product {
     id: string;
@@ -41,7 +42,7 @@ interface ProductContextType {
 
 const ProductContext = createContext<ProductContextType | undefined>(undefined);
 
-const API_URL = '/api';
+
 
 export const ProductProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [products, setProducts] = useState<Product[]>([]);
@@ -69,7 +70,7 @@ export const ProductProvider: React.FC<{ children: React.ReactNode }> = ({ child
                     settingsRes.json()
                 ]);
                 setProducts(productsData);
-                setSales(salesData);
+                setSales(salesData.map((s: Sale) => ({ ...s, timestamp: Number(s.timestamp) })));
                 setSettings(settingsData);
                 lastFetchRef.current = now;
             }
@@ -83,7 +84,7 @@ export const ProductProvider: React.FC<{ children: React.ReactNode }> = ({ child
     useEffect(() => {
         refreshData(true);
 
-        const socket = io();
+        const socket = io(SOCKET_URL);
 
         socket.on('connect', () => {
             setIsOnline(true);

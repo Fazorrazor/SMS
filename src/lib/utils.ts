@@ -14,6 +14,7 @@ export function formatCurrency(amount: number) {
 export function formatStock(stock: number, unit: string = 'Pack') {
     const full = Math.floor(stock);
     const fraction = stock - full;
+    const formattedFull = full.toLocaleString();
 
     let fractionText = '';
     if (fraction === 0.75) fractionText = '3/4';
@@ -22,6 +23,8 @@ export function formatStock(stock: number, unit: string = 'Pack') {
     else if (fraction > 0) fractionText = fraction.toFixed(2).replace('0.', '');
 
     if (full === 0 && fractionText) return `${fractionText} ${unit}`;
-    if (fractionText) return `${full} Full & ${fractionText} ${unit}s`;
-    return `${full} ${unit}${full !== 1 ? 's' : ''}`;
+    if (fractionText) return `${formattedFull} Full & ${fractionText} ${unit}s`;
+    const metricUnits = ['ml', 'l', 'kg', 'g', 'mg', 'm', 'cm', 'mm'];
+    const shouldPluralize = full !== 1 && !metricUnits.includes(unit.toLowerCase());
+    return `${formattedFull} ${unit}${shouldPluralize ? 's' : ''}`;
 }

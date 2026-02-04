@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { API_URL } from '../config';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Button } from '../components/ui/Button';
@@ -18,7 +19,7 @@ export const Login = () => {
     useEffect(() => {
         const fetchSettings = async () => {
             try {
-                const res = await fetch(`/api/settings`);
+                const res = await fetch(`${API_URL}/settings`);
                 if (res.ok) {
                     const data = await res.json();
                     setSettings(data);
