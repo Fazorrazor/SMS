@@ -1,8 +1,0 @@
---- CHECK START ---
-pool object exists.
-Attempting to connect...
-Connected successfully.
-Attempting to upsert setting...
-CHECK FAILED:
-error: syntax error at or near "ON"
---- CHECK DONE ---
