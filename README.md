@@ -1,73 +1,60 @@
-# React + TypeScript + Vite
+# 🚀 SMS - Stock Management System
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern, robust Stock Management System built with React, TypeScript, Vite, and Node.js.
 
-Currently, two official plugins are available:
+## ✨ Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- 📦 **Inventory Management**: Real-time tracking of products, SKUs, and stock levels.
+- 💰 **Sales Tracking**: Complete POS system with payment method support (Cash, Card, Transfer).
+- 📊 **Reports & Analytics**: Daily summaries, revenue tracking, and inventory valuation.
+- 👤 **User Management**: Role-based access control (Admin/Staff).
+- 🌙 **Modern UI**: Tailored theme with dark/light mode and rich micro-interactions.
+- ⚡ **Real-time Updates**: Powered by Socket.io for instant synchronization across devices.
 
-## React Compiler
+## 🛠️ Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Frontend**: React 19, Vite, Tailwind CSS, Framer Motion, Recharts, Lucide React.
+- **Backend**: Node.js, Express, Socket.io.
+- **Database**: PostgreSQL (Production) / SQLite (Local development).
+- **Deployment**: GitHub Pages (Frontend) & Render (Backend).
 
-## Expanding the ESLint configuration
+## 🚀 Deployment
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Frontend (GitHub Pages)
+The frontend is configured to deploy automatically via **GitHub Actions** on every push to the `main` branch.
+- **SPA Support**: Includes a custom `404.html` fallback to ensure `BrowserRouter` works seamlessly on page refreshes.
+- **Config**: Ensure `base: '/SMS/'` in `vite.config.ts` matches your repository name.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### Backend (Render)
+This project includes a `render.yaml` Blueprint for one-click deployment.
+1. Connect your GitHub repo to **Render**.
+2. Render will automatically detect the Blueprint and set up:
+   - A Node.js Web Service for the backend.
+   - A managed PostgreSQL database.
+3. Once deployed, update `src/config.ts` with your new backend URL.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## 💻 Local Development
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/Fazorrazor/SMS.git
+   cd SMS
+   ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+2. **Setup Backend**:
+   ```bash
+   cd server
+   npm install
+   # Create a .env file with DATABASE_URL
+   npm run dev
+   ```
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+3. **Setup Frontend**:
+   ```bash
+   cd ..
+   npm install
+   npm run dev
+   ```
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## 📝 License
+MIT
