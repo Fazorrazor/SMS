@@ -31,7 +31,7 @@ function App() {
       <AuthProvider>
         <Toaster position="top-right" richColors />
         <ProductProvider>
-          <Router>
+          <Router basename={import.meta.env.BASE_URL}>
             <Routes>
               <Route path="/login" element={<Login />} />
               <Route path="/" element={<ProtectedRoute><MainLayout /></ProtectedRoute>}>
