@@ -907,7 +907,7 @@ export const Dashboard = () => {
                         {user?.role === 'Admin' && (
                             <div className="p-4 bg-secondary-50/30 dark:bg-secondary-800/20 border-t border-secondary-100 dark:border-secondary-800">
                                 <button
-                                    onClick={() => window.location.href = '/inventory'}
+                                    onClick={() => navigate('/inventory')}
                                     className="flex items-center justify-center gap-2 w-full py-2.5 text-xs font-bold text-secondary-500 dark:text-secondary-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors group"
                                 >
                                     Manage Inventory
@@ -974,7 +974,7 @@ export const Dashboard = () => {
                         {user?.role === 'Admin' && (
                             <div className="p-4 bg-secondary-50/30 dark:bg-secondary-800/20 border-t border-secondary-100 dark:border-secondary-800">
                                 <button
-                                    onClick={() => window.location.href = '/sales'}
+                                    onClick={() => navigate('/sales')}
                                     className="flex items-center justify-center gap-2 w-full py-2.5 text-xs font-bold text-secondary-500 hover:text-primary-600 transition-colors group"
                                 >
                                     View Full Report
