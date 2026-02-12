@@ -42,6 +42,7 @@ import {
     Tooltip,
     ResponsiveContainer
 } from 'recharts';
+import { useNavigate } from 'react-router-dom';
 
 const CustomTooltip = ({ active, payload, label, currency, metric }: any) => {
     if (active && payload && payload.length) {
@@ -81,6 +82,7 @@ const CustomTooltip = ({ active, payload, label, currency, metric }: any) => {
 export const Dashboard = () => {
     const { products, sales, isLoading, voidSale, updateStock, refreshData } = useProducts();
     const { user } = useAuth();
+    const navigate = useNavigate();
     const [settings, setSettings] = useState<any>(null);
     const [chartTimeRange, setChartTimeRange] = useState<7 | 14 | 30 | 90 | 'YTD'>(7);
     const [chartMetric, setChartMetric] = useState<'revenue' | 'profit' | 'orders'>('revenue');
@@ -556,12 +558,12 @@ export const Dashboard = () => {
                     <p className="text-sm font-bold text-secondary-400 uppercase tracking-widest mt-1">Overview & Analytics</p>
                 </div>
                 <div className="flex items-center gap-2">
-                    <Button onClick={() => window.location.href = '/pos'} size="sm" className="shadow-lg shadow-primary-600/20 text-xs py-2">
+                    <Button onClick={() => navigate('/pos')} size="sm" className="shadow-lg shadow-primary-600/20 text-xs py-2">
                         <ShoppingCart className="w-3.5 h-3.5 mr-1.5" />
                         New Sale
                     </Button>
                     {user?.role === 'Admin' && (
-                        <Button variant="secondary" size="sm" onClick={() => window.location.href = '/products'} className="text-xs py-2">
+                        <Button variant="secondary" size="sm" onClick={() => navigate('/products')} className="text-xs py-2">
                             <Plus className="w-3.5 h-3.5 mr-1.5" />
                             Add Product
                         </Button>
